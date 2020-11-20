@@ -22,6 +22,7 @@ public class Plateau {
 
 	public String[][] initGrille() {
 		int n = 0;
+                char c = 'A';
 		// remplissage de la colonne avec les lettres
 		grille[0][0] = " ";
 		grille[1][0] = "a";
@@ -43,8 +44,14 @@ public class Plateau {
 		// remplissage de la colonne avec les lignes
 		for (int col = 1; col < 32; col++) {
 			if (col % 2 == 0) {
-				grille[0][col] = String.valueOf(n);
-				n++;
+                                if (n > 9){
+                                    grille[0][col] = Character.toString(c);
+                                    c++;
+                                }
+                                else{
+                                    grille[0][col] = String.valueOf(n);
+                                    n++;
+                                }
 			} else {
 				grille[0][col] = "|";
 			}
@@ -65,8 +72,7 @@ public class Plateau {
 		return grille;
 	}
         
-        public void initNavire()
-        {
+        public void initNavire(){
             Cuirasse cuirasse = new Cuirasse(0,0);
             Croiseur c1 = new Croiseur(0,0);
             Croiseur c2 = new Croiseur(0,0);
@@ -92,7 +98,7 @@ public class Plateau {
 	public void initPlacementNavires() {
 		int ligne;
 		int colonne;
-		double alea1;
+		double aleatoire;
                 int sens;
 		
                 // initialisation des navires
@@ -100,35 +106,30 @@ public class Plateau {
                 
                 // placement des navires
 
-                for (int k = 0; k < 10; k++)
-                {
+                for (int k = 0; k < 10; k++){
                     sens = (int)(Math.random() * 2);
-                    alea1 =  1+ (Math.random()*13);
-                    ligne = (int) alea1;
-                    alea1 =  Math.random() * 13;
-                    colonne = (int) alea1;
-                    while (colonne == 0 || colonne % 2 != 0)
-                    {
-                        alea1 =  Math.random() * 13;
-                        colonne = (int) alea1;
+                    aleatoire =  1+ (Math.random()*15);
+                    ligne = (int) aleatoire;
+                    aleatoire =  Math.random() * 31;
+                    colonne = (int) aleatoire;
+                    while (colonne == 0 || colonne % 2 != 0){
+                        aleatoire =  Math.random() * 31;
+                        colonne = (int) aleatoire;
                     }
-                    if (sens == 0)
-                    {
+                    if (sens == 0){
                         // navire vertical
-                        while (checkPlacement(ligne, colonne, navires[k], sens) == false)
-                        {
-                            alea1 =  1+ (Math.random()*13);
-                            ligne = (int) alea1;
-                            alea1 =  Math.random() * 13;
-                            colonne = (int) alea1;
-                            while (colonne == 0 || colonne % 2 != 0)
-                            {
-                                alea1 =  Math.random() * 13;
-                                colonne = (int) alea1;
+                        while (checkPlacement(ligne, colonne, navires[k], sens) == false){
+                            aleatoire =  1+ (Math.random()*15);
+                            ligne = (int) aleatoire;
+                            aleatoire =  Math.random() * 31;
+                            colonne = (int) aleatoire;
+                            while (colonne == 0 || colonne % 2 != 0){
+                                aleatoire =  Math.random() * 31;
+                                colonne = (int) aleatoire;
                             }
                         }
-                        System.out.println("colonne : " + colonne);
-                        for (int i = ligne; i < ligne+navires[k].taille; i++)
+                        
+                        for (int i = ligne; i < ligne+navires[k].taille; i++){
                             switch (navires[k].taille) {
                                 case 1:
                                     grille[i][colonne] = "s";
@@ -143,23 +144,41 @@ public class Plateau {
                                     grille[i][colonne] = "C";
                                     break;
                             }
+                        }
                     }
-                    else
-                    {
+                    else{
                         //navire horizontal
-                        
-                    }
-                }
-                
-		//System.out.println("Ligne : " + ligne);
-		//System.out.println("Colonne : " + colonne);
-                
-		/*for (int i = colonne; i < 30; i++) {
-			if(i%2==0) {
-				grille[ligne][i + 2] = "c";
-			} 
-		}*/
 
+                            while (checkPlacement(ligne, colonne, navires[k], sens) == false){
+                                aleatoire =  1+ (Math.random()*15);
+                                ligne = (int) aleatoire;
+                                aleatoire =  Math.random() * 31;
+                                colonne = (int) aleatoire;
+                                while (colonne == 0 || colonne % 2 != 0){
+                                    aleatoire =  Math.random() * 31;
+                                    colonne = (int) aleatoire;
+                                }
+                            }
+                            for (int j = colonne; j < (colonne + (navires[k].taille*2)); j+=2){
+                                switch (navires[k].taille) {
+                                case 1:
+                                    grille[ligne][j] = "s";
+                                    break;
+                                case 3:
+                                    grille[ligne][j] = "d";
+                                    break;
+                                case 5:
+                                    grille[ligne][j] = "c";
+                                    break;
+                                case 7:
+                                    grille[ligne][j] = "C";
+                                    break;
+                                }
+                            }
+                        }
+                    //System.out.println("ligne : " + ligne + " et colonne : " + colonne + " avec pour sens -> " + sens);
+                }
+                //System.out.println();
 	}
 
 	public void afficherPlateau() {
@@ -172,25 +191,22 @@ public class Plateau {
 		}
 	}
         
-        public boolean checkPlacement(int ligne, int colonne, Navire n, int sens)
-        {
-            if (sens == 0)
-            {
-                for (int i = ligne; i < ligne+n.taille; i++)
-                {
-                    if ("c".equals(grille[i][colonne]))
+        public boolean checkPlacement(int ligne, int colonne, Navire n, int sens){
+            if (n.taille == 1 && !" ".equals(grille[ligne][colonne]))
+                return false;
+            if (sens == 0){
+                for (int i = ligne; i < ligne+n.taille; i++){
+                    if (!" ".equals(grille[i][colonne]))
                         return false;
                     if (i == 15 && n.taille > 1 && i + 1 < ligne+n.taille)
                         return false;
                 }
             }
-            else
-            {
-                for (int j = colonne; j < (colonne + n.taille)*2; j+=2)
-                {
-                    if ("c".equals(grille[ligne][j]))
+            else{
+                for (int j = colonne; j < (colonne + (n.taille*2)); j+=2){
+                    if (!" ".equals(grille[ligne][j]))
                         return false;
-                    if (j == 30 &&  n.taille > 1 && j + 2 < (colonne + n.taille)*2)
+                    if (j == 30 &&  n.taille > 1 && j + 2 < (colonne + (n.taille*2)))
                         return false;
                 }
             }
