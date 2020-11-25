@@ -10,43 +10,29 @@ package bataillenavale;
  * @author kimro
  */
 public class Plateau {
-	private int dimensionX;
-	private int dimensionY;
 	String[][] grille = new String[16][32];
         Navire[] navires = new Navire[10];
 
 	public Plateau() {
-		this.dimensionX = 16;
-		this.dimensionY = 32;
 	}
 
 	public String[][] initGrille() {
 		int n = 0;
-                char c = 'A';
+                char c1 = 'a';
+                char c2 = 'A';
 		// remplissage de la colonne avec les lettres
 		grille[0][0] = " ";
-		grille[1][0] = "a";
-		grille[2][0] = "b";
-		grille[3][0] = "c";
-		grille[4][0] = "d";
-		grille[5][0] = "e";
-		grille[6][0] = "f";
-		grille[7][0] = "g";
-		grille[8][0] = "h";
-		grille[9][0] = "i";
-		grille[10][0] = "j";
-		grille[11][0] = "k";
-		grille[12][0] = "l";
-		grille[13][0] = "m";
-		grille[14][0] = "n";
-		grille[15][0] = "o";
-
+		for (int k = 1; k < 16; k++){
+                    grille[k][0] = Character.toString(c1);
+                    c1++;
+                }
+                
 		// remplissage de la colonne avec les lignes
 		for (int col = 1; col < 32; col++) {
 			if (col % 2 == 0) {
                                 if (n > 9){
-                                    grille[0][col] = Character.toString(c);
-                                    c++;
+                                    grille[0][col] = Character.toString(c2);
+                                    c2++;
                                 }
                                 else{
                                     grille[0][col] = String.valueOf(n);
@@ -99,7 +85,6 @@ public class Plateau {
 		int ligne;
 		int colonne;
 		double aleatoire;
-                int sens;
 		
                 // initialisation des navires
                 initNavire();
@@ -107,7 +92,7 @@ public class Plateau {
                 // placement des navires
 
                 for (int k = 0; k < 10; k++){
-                    sens = (int)(Math.random() * 2);
+                    navires[k].sens = (int)(Math.random() * 2);
                     aleatoire =  1+ (Math.random()*15);
                     ligne = (int) aleatoire;
                     aleatoire =  Math.random() * 31;
@@ -116,9 +101,9 @@ public class Plateau {
                         aleatoire =  Math.random() * 31;
                         colonne = (int) aleatoire;
                     }
-                    if (sens == 0){
+                    if (navires[k].sens == 0){
                         // navire vertical
-                        while (checkPlacement(ligne, colonne, navires[k], sens) == false){
+                        while (checkPlacement(ligne, colonne, navires[k], navires[k].sens) == false){
                             aleatoire =  1+ (Math.random()*15);
                             ligne = (int) aleatoire;
                             aleatoire =  Math.random() * 31;
@@ -149,7 +134,7 @@ public class Plateau {
                     else{
                         //navire horizontal
 
-                            while (checkPlacement(ligne, colonne, navires[k], sens) == false){
+                            while (checkPlacement(ligne, colonne, navires[k], navires[k].sens) == false){
                                 aleatoire =  1+ (Math.random()*15);
                                 ligne = (int) aleatoire;
                                 aleatoire =  Math.random() * 31;
@@ -176,13 +161,12 @@ public class Plateau {
                                 }
                             }
                         }
-                    //System.out.println("ligne : " + ligne + " et colonne : " + colonne + " avec pour sens -> " + sens);
                 }
-                //System.out.println();
 	}
 
 	public void afficherPlateau() {
 		// affichage dans la console du tableau
+                
 		for (int i = 0; i < 16; i++) {
 			for (int j = 0; j < 32; j++) {
 				System.out.print(grille[i][j]);
