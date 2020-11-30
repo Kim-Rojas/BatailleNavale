@@ -10,6 +10,8 @@ public class BatailleNavale {
         Plateau p3 = new Plateau();
         int a;
         String c;
+        String chemin = "";
+        Plateau essai = new Plateau();
 
         String[][] grilleJoueur = new String[32][32];
         String[][] grilleApercuIA = new String[32][32];
@@ -18,6 +20,10 @@ public class BatailleNavale {
         grilleJoueur = p1.initGrille();
         p1.initPlacementNavires();
         grilleApercuIA = p2.initGrille();
+        
+        //Test sauvegarde partie
+        chemin = p1.savePartie(p1);
+        essai = p1.chargerPartie(chemin, essai);
 
         grilleIA = p3.initGrille();
         p3.initPlacementNavires();
@@ -41,5 +47,6 @@ public class BatailleNavale {
             System.out.print("Entrer un  nombre : ");
             a = s.nextInt();
         }
+        
     }
 }

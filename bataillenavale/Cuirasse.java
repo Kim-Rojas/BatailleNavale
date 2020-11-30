@@ -1,13 +1,19 @@
 package bataillenavale;
 
+import java.util.ArrayList;
+import javafx.util.Pair;
+
 public class Cuirasse extends Navire{
 
-    public Cuirasse(int positionLigne,int positionColonne){
+    public Cuirasse(){
+        this.nom = "Cuirasse";
         this.sens = 0;
         this.taille = 7;
         this.puissance = 9;
-        this.posX = positionLigne;
-        this.posY = positionColonne;
+    }
+    
+    public Cuirasse(ArrayList<Pair> tabPos){
+        this.tabPos = tabPos;
     }
 
     @Override

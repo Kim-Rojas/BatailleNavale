@@ -1,13 +1,23 @@
 package bataillenavale;
 
+import java.util.ArrayList;
+import javafx.util.Pair;
+
 public class Croiseur extends Navire{
     
-    public Croiseur(int positionLigne, int positionColonne){
+     public Croiseur(){
+        this.nom = "Croiseur";
         this.sens = 0;
         this.taille = 5;
         this.puissance = 4;
-        this.posX = positionLigne;
-        this.posY = positionColonne;
+    }
+    
+    public Croiseur(ArrayList<Pair> tabPos){
+        this.nom = "Croiseur";
+        this.sens = 0;
+        this.taille = 5;
+        this.puissance = 4;
+        this.tabPos = tabPos;
     }
 
     @Override

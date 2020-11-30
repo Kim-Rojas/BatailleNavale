@@ -1,13 +1,23 @@
 package bataillenavale;
 
+import java.util.ArrayList;
+import javafx.util.Pair;
+
 public class SousMarin extends Navire{
     
-    public SousMarin(int positionLigne, int positionColonne){
+    public SousMarin(){
+        this.nom = "Sous-Marin";
         this.sens = 0;
         this.taille = 1;
         this.puissance = 1;
-        this.posX = positionLigne;
-        this.posY = positionColonne;
+    }
+    
+    public SousMarin(ArrayList<Pair> tabPos){
+        this.nom = "Sous-Marin";
+        this.sens = 0;
+        this.taille = 1;
+        this.puissance = 1;
+        this.tabPos = tabPos;
     }
 
     @Override
