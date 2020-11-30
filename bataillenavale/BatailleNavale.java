@@ -1,21 +1,18 @@
 package bataillenavale;
 
-/**
- *
- * @author kimro
- */
-public class BatailleNavale {
+import java.util.Scanner;
 
-    /**
-     * @param args the command line arguments
-     */
+public class BatailleNavale {
+ 
     public static void main(String[] args) {
         Plateau p1 = new Plateau();
         Plateau p2 = new Plateau();
         Plateau p3 = new Plateau();
+        int a;
+        String c;
 
         String[][] grilleJoueur = new String[32][32];
-        String[][] grilleApercuIA =new String[32][32];
+        String[][] grilleApercuIA = new String[32][32];
         String[][] grilleIA = new String[32][32];
 
         grilleJoueur = p1.initGrille();
@@ -25,7 +22,24 @@ public class BatailleNavale {
         grilleIA = p3.initGrille();
         p3.initPlacementNavires();
         p1.afficherPlateau();
+        p1.navires[6].tirer(8, 16, grilleIA);
+        p1.navires[0].tirer(6, 8, grilleIA);
+        p1.navires[0].tirer(2, 4, grilleIA);
+        p2.lien(grilleIA);
         System.out.println("\n");
         p2.afficherPlateau();
+        System.out.println("\n");
+        Scanner s = new Scanner(System.in);
+        while (true){
+            System.out.println("");
+            System.out.println("##################################");
+            System.out.println("tour suivant");
+            System.out.println("##################################");
+            System.out.println("");
+            System.out.print("Entrer une lettre : ");
+            c = s.next();
+            System.out.print("Entrer un  nombre : ");
+            a = s.nextInt();
+        }
     }
 }

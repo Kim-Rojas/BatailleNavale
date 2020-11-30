@@ -12,7 +12,7 @@ public class SousMarin extends Navire{
 
     @Override
     public void tirer(int ligne, int colonne, String[][] tab) {
-        if (!" ".equals(tab[ligne][colonne]))
+        if (!" ".equals(tab[ligne][colonne]) && tab[ligne][colonne] != null)
             tab[ligne][colonne] = "X";
     }
 

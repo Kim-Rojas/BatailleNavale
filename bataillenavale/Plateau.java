@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package bataillenavale;
+import java.io.*;
 
 /**
  *
@@ -174,6 +175,15 @@ public class Plateau {
 			System.out.println("");
 		}
 	}
+        
+public void lien(String[][] tab){
+    for (int i = 0; i < 16; i++) {
+        for (int j = 0; j < 32; j++) {
+            if ("X".equals(tab[i][j]))
+                grille[i][j] = "X";
+        }
+    }
+}
         
         public boolean checkPlacement(int ligne, int colonne, Navire n, int sens){
             if (n.taille == 1 && !" ".equals(grille[ligne][colonne]))

@@ -12,7 +12,7 @@ public class Croiseur extends Navire{
 
     @Override
     public void tirer(int ligne, int colonne, String[][] tab) {
-        if (!" ".equals(tab[ligne][colonne]) && !"s".equals(tab[ligne][colonne]))
+        if (!" ".equals(tab[ligne][colonne]) && !"s".equals(tab[ligne][colonne]) && tab[ligne][colonne] != null)
             tab[ligne][colonne] = "X";
         if (!" ".equals(tab[ligne][colonne+2]) && !"s".equals(tab[ligne][colonne+2]) && tab[ligne][colonne+2] != null)
             tab[ligne][colonne+1] = "X";
