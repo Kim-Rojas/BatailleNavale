@@ -1,11 +1,14 @@
 package bataillenavale;
 
-import java.util.ArrayList;
-import javafx.util.Pair;
+/**
+*
+* @author Benjamin ROBSON, Kim ROJAS
+* 
+*/
 
-public class SousMarin extends Navire{
+public class SousMarin extends Navire {
     
-    public SousMarin(){
+	public SousMarin(){
         this.nom = "Sous-Marin";
         this.sens = 0;
         this.taille = 1;

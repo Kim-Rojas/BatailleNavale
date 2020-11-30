@@ -1,10 +1,13 @@
 package bataillenavale;
 
-import java.util.ArrayList;
-import javafx.util.Pair;
+/**
+*
+* @author Kim ROJAS
+* 
+*/
 
 public abstract class Navire {
-    protected String nom;
+	protected String nom;
     protected int sens;
     protected int taille;
     protected int puissance;

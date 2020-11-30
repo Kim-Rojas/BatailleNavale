@@ -2,10 +2,20 @@ package bataillenavale;
 
 import java.util.Scanner;
 
+/**
+ *
+ * @author Louis DUTTIER, Benjamin ROBSON, Kim ROJAS
+ * 
+ */
+
 public class BatailleNavale {
- 
-    public static void main(String[] args) {
-        Plateau p1 = new Plateau();
+	/**
+	 *
+	 * @author Louis DUTTIER, Benjamin ROBSON
+	 * 
+	 */
+	public static void afficherJeu() {
+		Plateau p1 = new Plateau();
         Plateau p2 = new Plateau();
         Plateau p3 = new Plateau();
         int a;
@@ -47,6 +57,71 @@ public class BatailleNavale {
             System.out.print("Entrer un  nombre : ");
             a = s.nextInt();
         }
-        
+	}
+	
+	/**
+	 *
+	 * @author Louis DUTTIERS
+	 * 
+	 */
+	
+	public static void afficherMenu() {
+		System.out.println("Mobile Naval");
+    	System.out.println("---------------------");
+    	System.out.println("1 - Jouer");
+    	System.out.println("2 - Charger une partie");
+    	System.out.println("3 - Règles du jeu");
+    	System.out.println("4 - Quitter Mobile Naval");
+    	System.out.println(" ");
+	}
+	
+	/**
+	 *
+	 * @author Louis DUTTIER
+	 * 
+	 */
+	
+	public static void Menu() {
+		Scanner choix = new Scanner(System.in);
+    	
+    	afficherMenu();
+    	System.out.print("Veuillez saisir un Nombre : ");
+    	int incertionChoix = choix.nextInt() ;
+
+    	switch(incertionChoix) {
+    		case 1 : 
+    			afficherJeu();
+    			break;
+    		case 2 : 
+    			System.out.println("Choisir le ficher en question :");
+    			System.out.println(" ");
+    			System.out.println("---------------------");
+    			Menu();
+    			break;
+    		case 3 : 
+    			System.out.println("Mobile Naval : règle du jeu");
+    			System.out.println(" ");
+    			System.out.println("---------------------");
+    			Menu();
+    			break;
+    		case 4 :
+    			System.out.println("Au revoir :)");
+    			System.exit(1);
+    			break;
+    		default : 
+    			System.out.println("Choissisez entre 1 et 4");
+    			System.out.println(" ");
+    			Menu();
+    			break;
+    	}
+    	Menu();
+	}
+	
+    /**
+     * @param args the 
+     * command line arguments
+     */
+    public static void main(String[] args) {
+    	Menu();
     }
 }

@@ -1,10 +1,13 @@
 package bataillenavale;
 
-import java.util.ArrayList;
-import javafx.util.Pair;
+/**
+*
+* @author Benjamin ROBSON, Kim ROJAS
+* 
+*/
 
-public class Destroyer extends Navire{
-    protected int fusee;
+public class Destroyer extends Navire {
+protected int fusee;
     
     public Destroyer (){
         this.nom = "Destroyer";

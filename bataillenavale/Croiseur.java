@@ -1,11 +1,13 @@
 package bataillenavale;
 
-import java.util.ArrayList;
-import javafx.util.Pair;
+/**
+*
+* @author Benjamin ROBSON, Kim ROJAS
+*/
 
-public class Croiseur extends Navire{
+public class Croiseur extends Navire {
     
-     public Croiseur(){
+	public Croiseur(){
         this.nom = "Croiseur";
         this.sens = 0;
         this.taille = 5;
@@ -39,3 +41,4 @@ public class Croiseur extends Navire{
     }
     
 }
+

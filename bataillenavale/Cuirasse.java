@@ -1,11 +1,14 @@
 package bataillenavale;
 
-import java.util.ArrayList;
-import javafx.util.Pair;
+/**
+*
+* @author Benjamin ROBSON, Kim ROJAS
+* 
+*/
 
-public class Cuirasse extends Navire{
+public class Cuirasse extends Navire {
 
-    public Cuirasse(){
+	public Cuirasse(){
         this.nom = "Cuirasse";
         this.sens = 0;
         this.taille = 7;
@@ -31,4 +34,5 @@ public class Cuirasse extends Navire{
         posX = ligne;
         posY = colonne;
     }
+    
 }

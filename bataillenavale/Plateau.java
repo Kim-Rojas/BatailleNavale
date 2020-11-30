@@ -1,24 +1,27 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package bataillenavale;
 
-import com.sun.org.apache.xml.internal.security.encryption.Serializer;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.util.Pair;
+
+import com.sun.org.apache.xml.internal.serialize.Serializer;
+import com.sun.tools.javac.util.Pair;
+
+
 
 /**
- *
- * @author kimro
- */
-public class Plateau {
+*
+* @author Louis DUTTIER, Benjamin ROBSON, Kim ROJAS
+* 
+*/
 
-    String[][] grille;
+public class Plateau {
+	String[][] grille;
     Navire[] navires;
 
     public Plateau() {
@@ -241,7 +244,7 @@ public class Plateau {
         }
 
         if (isFinie == true) {
-            System.out.println("La partie est terminÃ©e");
+            System.out.println("La partie est terminée");
             return;
         }
     }
