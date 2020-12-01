@@ -16,6 +16,10 @@ public class Cuirasse extends Navire {
     }
     
     public Cuirasse(ArrayList<Pair> tabPos){
+	this.nom = "Cuirasse";
+        this.sens = 0;
+        this.taille = 7;
+        this.puissance = 9;
         this.tabPos = tabPos;
     }
 
