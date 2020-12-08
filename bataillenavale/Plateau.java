@@ -1,17 +1,12 @@
-package bataillenavale;
+package com.mycompany.bataillenavale;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.sun.org.apache.xml.internal.serializer.Serializer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.org.apache.xml.internal.serialize.Serializer;
-import com.sun.tools.javac.util.Pair;
-
+import javafx.util.Pair;
 
 
 /**
@@ -21,7 +16,7 @@ import com.sun.tools.javac.util.Pair;
 */
 
 public class Plateau {
-	String[][] grille;
+    String[][] grille;
     Navire[] navires;
 
     public Plateau() {
@@ -244,7 +239,7 @@ public class Plateau {
         }
 
         if (isFinie == true) {
-            System.out.println("La partie est terminée");
+            System.out.println("La partie est terminÃ©e");
             return;
         }
     }
@@ -363,3 +358,4 @@ public class Plateau {
         return plateau;
     }
 }
+

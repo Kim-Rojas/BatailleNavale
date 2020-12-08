@@ -1,4 +1,8 @@
-package bataillenavale;
+package com.mycompany.bataillenavale;
+
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import javafx.util.Pair;
 
 /**
 *
@@ -25,5 +29,5 @@ public abstract class Navire {
      */
     public abstract void tirer(int ligne, int colonne, String[][] tab);
     
-    public abstract void deplacer(int ligne, int colonne);
+    public abstract void deplacer(KeyEvent e, int direction, int ligne, int colonne);
 }

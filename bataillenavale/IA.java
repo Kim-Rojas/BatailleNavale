@@ -1,4 +1,4 @@
-package bataillenavale;
+package com.mycompany.bataillenavale;
 
 /**
  *
@@ -7,5 +7,5 @@ package bataillenavale;
  */
 
 public class IA {
-
+    
 }
