@@ -1,12 +1,18 @@
-package com.mycompany.bataillenavale;
+package bataillenavale;
 
-import com.sun.org.apache.xml.internal.serializer.Serializer;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.sun.org.apache.xml.internal.serialize.Serializer;
 import javafx.util.Pair;
+
+
 
 
 /**
@@ -17,14 +23,15 @@ import javafx.util.Pair;
 
 public class Plateau {
     String[][] grille;
-    Navire[] navires;
+        ArrayList<Navire> navires;
 
     public Plateau() {
         this.grille = new String[16][32];
-        this.navires = new Navire[10];
+        this.navires = new ArrayList<Navire>();
     }
 
-    public Plateau(Navire[] tabNav) {
+    public Plateau(ArrayList tabNav) {
+        this.grille = new String[16][32];
         this.navires = tabNav;
     }
 
@@ -80,16 +87,16 @@ public class Plateau {
         SousMarin sm2 = new SousMarin();
         SousMarin sm3 = new SousMarin();
         SousMarin sm4 = new SousMarin();
-        navires[0] = cuirasse;
-        navires[1] = c1;
-        navires[2] = c2;
-        navires[3] = d1;
-        navires[4] = d2;
-        navires[5] = d3;
-        navires[6] = sm1;
-        navires[7] = sm2;
-        navires[8] = sm3;
-        navires[9] = sm4;
+        navires.add(cuirasse);
+        navires.add(c1);
+        navires.add(c2);
+        navires.add(d1);
+        navires.add(d2);
+        navires.add(d3);
+        navires.add(sm1);
+        navires.add(sm2);
+        navires.add(sm3);
+        navires.add(sm4);
     }
 
     public void initPlacementNavires() {
@@ -102,7 +109,7 @@ public class Plateau {
 
         // placement des navires
         for (int k = 0; k < 10; k++) {
-            navires[k].sens = (int) (Math.random() * 2);
+            navires.get(k).sens = (int) (Math.random() * 2);
             aleatoire = 1 + (Math.random() * 15);
             ligne = (int) aleatoire;
             aleatoire = Math.random() * 31;
@@ -111,9 +118,9 @@ public class Plateau {
                 aleatoire = Math.random() * 31;
                 colonne = (int) aleatoire;
             }
-            if (navires[k].sens == 0) {
+            if (navires.get(k).sens == 0) {
                 // navire vertical
-                while (checkPlacement(ligne, colonne, navires[k], navires[k].sens) == false) {
+                while (checkPlacement(ligne, colonne, navires.get(k), navires.get(k).sens) == false) {
                     aleatoire = 1 + (Math.random() * 15);
                     ligne = (int) aleatoire;
                     aleatoire = Math.random() * 31;
@@ -124,30 +131,30 @@ public class Plateau {
                     }
                 }
 
-                for (int i = ligne; i < ligne + navires[k].taille; i++) {
-                    switch (navires[k].taille) {
+                for (int i = ligne; i < ligne + navires.get(k).taille; i++) {
+                    switch (navires.get(k).taille) {
                         case 1:
                             grille[i][colonne] = "s";
-                            navires[k].tabPos.add(new Pair(i, colonne));
+                            navires.get(k).tabPos.add(new Pair(i, colonne));
                             break;
                         case 3:
                             grille[i][colonne] = "d";
-                            navires[k].tabPos.add(new Pair(i, colonne));
+                            navires.get(k).tabPos.add(new Pair(i, colonne));
                             break;
                         case 5:
                             grille[i][colonne] = "c";
-                            navires[k].tabPos.add(new Pair(i, colonne));
+                            navires.get(k).tabPos.add(new Pair(i, colonne));
                             break;
                         case 7:
                             grille[i][colonne] = "C";
-                            navires[k].tabPos.add(new Pair(i, colonne));
+                            navires.get(k).tabPos.add(new Pair(i, colonne));
                             break;
                     }
                 }
             } else {
                 //navire horizontal
 
-                while (checkPlacement(ligne, colonne, navires[k], navires[k].sens) == false) {
+                while (checkPlacement(ligne, colonne, navires.get(k), navires.get(k).sens) == false) {
                     aleatoire = 1 + (Math.random() * 15);
                     ligne = (int) aleatoire;
                     aleatoire = Math.random() * 31;
@@ -157,27 +164,78 @@ public class Plateau {
                         colonne = (int) aleatoire;
                     }
                 }
-                for (int j = colonne; j < (colonne + (navires[k].taille * 2)); j += 2) {
-                    switch (navires[k].taille) {
+                for (int j = colonne; j < (colonne + (navires.get(k).taille * 2)); j += 2) {
+                    switch (navires.get(k).taille) {
                         case 1:
                             grille[ligne][j] = "s";
-                            navires[k].tabPos.add(new Pair(ligne, j));
+                            navires.get(k).tabPos.add(new Pair(ligne, j));
                             break;
                         case 3:
                             grille[ligne][j] = "d";
-                            navires[k].tabPos.add(new Pair(ligne, j));
+                            navires.get(k).tabPos.add(new Pair(ligne, j));
                             break;
                         case 5:
                             grille[ligne][j] = "c";
-                            navires[k].tabPos.add(new Pair(ligne, j));
+                            navires.get(k).tabPos.add(new Pair(ligne, j));
                             break;
                         case 7:
                             grille[ligne][j] = "C";
-                            navires[k].tabPos.add(new Pair(ligne, j));
+                            navires.get(k).tabPos.add(new Pair(ligne, j));
                             break;
                     }
                 }
             }
+        }
+    }
+    
+    public void placementNaviresCharges(){
+        int k=0;
+        for(int i=0; i<this.navires.size(); i++){
+            //si le navire est place verticalement
+            if(this.navires.get(i).sens == 0){
+                int ligne = Integer.parseInt((String) this.navires.get(i).tabPos.get(0).getKey());
+                int colonne = Integer.parseInt((String)this.navires.get(i).tabPos.get(0).getValue());
+                for (int j = ligne; j < ligne + navires.get(i).taille; j++) {                    
+                    switch (navires.get(i).taille) {
+                        case 1:
+                            grille[j][colonne] = "s";
+                            break;
+                        case 3:
+                            grille[j][colonne] = "d";
+                            break;
+                        case 5:
+                            grille[j][colonne] = "c";
+                            break;
+                        case 7:
+                            grille[j][colonne] = "C";
+                            break;
+                    }
+                }
+                
+            } 
+            // si le navire est plpace horizontalement
+            else {
+                int col = Integer.parseInt((String)this.navires.get(i).tabPos.get(0).getValue());
+                int ligne = Integer.parseInt((String)this.navires.get(i).tabPos.get(0).getKey());
+                for (int j = col; j < col + navires.get(i).taille*2; j=j+2) {
+                    
+                    switch (navires.get(i).taille) {
+                        case 1:
+                            grille[ligne][j] = "s";
+                            break;
+                        case 3:
+                            grille[ligne][j] = "d";
+                            break;
+                        case 5:
+                            grille[ligne][j] = "c";
+                            break;
+                        case 7:
+                            grille[ligne][j] = "C";
+                            break;
+                    }
+                }
+            }
+            k++;
         }
     }
 
@@ -239,36 +297,28 @@ public class Plateau {
         }
 
         if (isFinie == true) {
-            System.out.println("La partie est terminée");
+            System.out.println("La partie est termin�e");
             return;
         }
     }
 
-    public String savePartie(Plateau p) {
-        File fichierSauvegarde = new File("partie.txt");
+ public static String savePartie(Plateau p, String nomFichier) {
+        
+        File fichierSauvegarde = new File(nomFichier+".txt");
 
         try {
             FileWriter writer = new FileWriter(fichierSauvegarde);
             for (int i = 0; i < 10; i++) {
-//                writer.write("Navire : " + p.navires[i].nom + "\n");
-//                writer.write("Sens : " + p.navires[i].sens + "\n");
-//                writer.write("Taille : " + p.navires[i].taille + "\n");
-//                writer.write("Puissance : " + p.navires[i].puissance + "\n");
-//
-//                for (int j = 0; j < p.navires[i].taille; j++) {
-//                    writer.write(p.navires[i].tabPos.get(j).getKey() + ":" + p.navires[i].tabPos.get(j).getValue() + " ");
-//                }
-//                writer.write("\n \n");
 
-                writer.write(p.navires[i].nom + "\n");
-                writer.write(p.navires[i].sens + "\n");
-                writer.write(p.navires[i].taille + "\n");
-                writer.write(p.navires[i].puissance + "\n");
+                writer.write(p.navires.get(i).nom + "\n");
+                writer.write(p.navires.get(i).sens + "\n");
+                writer.write(p.navires.get(i).taille + "\n");
+                writer.write(p.navires.get(i).puissance + "\n");
 
-                for (int j = 0; j < p.navires[i].taille; j++) {
-                    writer.write(p.navires[i].tabPos.get(j).getKey() + " " + p.navires[i].tabPos.get(j).getValue() + " ");
+                for (int j = 0; j < p.navires.get(i).taille; j++) {
+                    writer.write(p.navires.get(i).tabPos.get(j).getKey() + " " + p.navires.get(i).tabPos.get(j).getValue() + " ");
                 }
-                writer.write("\n \n");
+                writer.write("\n");
 
             }
             writer.close();
@@ -281,12 +331,18 @@ public class Plateau {
         return fichierSauvegarde.getAbsolutePath();
 
     }
-
-    //A TESTER
-    public Plateau chargerPartie(String chemin, Plateau p) {
+ 
+//    public static ArrayList saveApercu(){
+//        ArrayList<Pair> tabPosN = new ArrayList<Pair>();
+//        
+//        return tabPosN;
+//    }
+//    
+//    
+    public static Plateau chargerPartie(String chemin) {
         int i = 1;
         String[] tab = new String[4];
-        ArrayList<Pair> tabPos = new ArrayList<Pair>();
+        ArrayList<Pair> tabPos;
         Navire navire = null;
         ArrayList<Navire> listeNavires = new ArrayList<Navire>();
         Navire[] tabNavire = new Navire[10];
@@ -298,29 +354,31 @@ public class Plateau {
             FileReader fr = new FileReader(f);
             BufferedReader br = new BufferedReader(fr);
             String ligne = null; // contiendra chaque ligne
+            //int h = 0;
 
             while ((ligne = br.readLine()) != null) {
                 if (i % 5 == 1) {
                     tab[0] = ligne;
-                    System.out.println(ligne);
+                    //System.out.println(ligne);
                 }
-                if (i % 5 == 2) {
-                    System.out.println(ligne);
+                else if (i % 5 == 2) {
+                    //System.out.println(ligne);
                     tab[1] = ligne;
                 }
-                if (i % 5 == 3) {
-                    System.out.println(ligne);
+                else if (i % 5 == 3) {
+                    //System.out.println(ligne);
                     tab[2] = ligne;
                 }
-                if (i % 5 == 4) {
-                    System.out.println(ligne);
+                else if (i % 5 == 4) {
+                    //System.out.println(ligne);
                     tab[3] = ligne;
 
                 }
-                if (i % 5 == 0) {
-                    System.out.println(ligne);
+                else if (i % 5 == 0) {
+                    //System.out.println(ligne);
 
                     //recuperation des positions
+                    tabPos = new ArrayList<Pair>();
                     String[] positions = ligne.split(" ");
                     for (int k = 0; k < positions.length - 1; k = k + 2) {
                         tabPos.add(new Pair(positions[k], positions[k + 1]));
@@ -328,17 +386,19 @@ public class Plateau {
 
                     //creation des objetcs navire
                     if (tab[0].equals("Croiseur")) {
-                        navire = new Croiseur(tabPos);
+                        navire = new Croiseur(tabPos, Integer.parseInt(tab[1]));
                     } else if (tab[0].equals("Cuirasse")) {
-                        navire = new Cuirasse(tabPos);
+                        navire = new Cuirasse(tabPos, Integer.parseInt(tab[1]));
                     } else if (tab[0].equals("Destroyer")) {
-                        navire = new Destroyer(tabPos);
+                        navire = new Destroyer(tabPos, Integer.parseInt(tab[1]));
                     } else if (tab[0].equals("Sous-Marin")) {
-                        navire = new SousMarin(tabPos);
+                        navire = new SousMarin(tabPos, Integer.parseInt(tab[1]));
                     }
                     //ajout du navire dans l'arraylist
                     listeNavires.add(navire);
+                    
                 }
+                //tabPos.clear();
                 i++;
             }
 
@@ -347,7 +407,7 @@ public class Plateau {
             for (int k = 0; k < 10; k++) {
                 tabNavire[k] = listeNavires.get(k);
             }
-            plateau = new Plateau(tabNavire);
+            plateau = new Plateau(listeNavires);
 
         } catch (IOException e) {
             System.out.println("Impossible de charger le plateau");
@@ -358,4 +418,3 @@ public class Plateau {
         return plateau;
     }
 }
-

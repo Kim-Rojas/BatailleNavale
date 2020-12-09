@@ -1,4 +1,4 @@
-package com.mycompany.bataillenavale;
+package bataillenavale;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
@@ -16,17 +16,21 @@ public class BatailleNavale {
 
     /**
      *
-     * @author Louis DUTTIER, Benjamin ROBSON
+     * @author Louis DUTTIER, Benjamin ROBSON, Kim ROJAS
      *
      */
+
+    final static String cheminFinal = "";
+    private static String cheminJ1;
+    private static String cheminIA;
+    private static String cheminApercu;
+
     public static void afficherJeu() {
         Plateau p1 = new Plateau();
         Plateau p2 = new Plateau();
         Plateau p3 = new Plateau();
         int a;
         String c;
-        String chemin = "";
-        Plateau essai = new Plateau();
 
         String[][] grilleJoueur = new String[32][32];
         String[][] grilleApercuIA = new String[32][32];
@@ -36,16 +40,12 @@ public class BatailleNavale {
         p1.initPlacementNavires();
         grilleApercuIA = p2.initGrille();
 
-        //Test sauvegarde partie
-        chemin = p1.savePartie(p1);
-        essai = p1.chargerPartie(chemin, essai);
-
         grilleIA = p3.initGrille();
         p3.initPlacementNavires();
         p1.afficherPlateau();
-        p1.navires[6].tirer(8, 16, grilleIA);
-        p1.navires[0].tirer(6, 8, grilleIA);
-        p1.navires[0].tirer(2, 4, grilleIA);
+        p1.navires.get(6).tirer(8, 16, grilleIA);
+        p1.navires.get(0).tirer(6, 8, grilleIA);
+        p1.navires.get(0).tirer(2, 4, grilleIA);
         p2.lien(grilleIA);
         System.out.println("\n");
         p2.afficherPlateau();
@@ -55,14 +55,77 @@ public class BatailleNavale {
             System.out.println("");
             System.out.println("##################################");
             System.out.println("tour suivant");
+            System.out.println("Entrez \"q\" pour quitter la partie en cours");
             System.out.println("##################################");
             System.out.println("");
             System.out.println("Entrer une lettre : ");
             c = s.next();
+            if(c.equals("q")){
+                String nom = "";
+                System.out.println("Entre le nom du fichier de sauvergarde: ");
+                nom = s.next();
+                cheminJ1 = Plateau.savePartie(p1, nom);
+                cheminApercu = Plateau.savePartie(p1, nom+"Apercu");
+                cheminIA = Plateau.savePartie(p3, nom+"IA");
+                return;
+            }
             System.out.println("Entrer un  nombre : ");
             a = s.nextInt();
         }
     }
+
+    /**
+     *
+     * @author Kim ROJAS
+     *
+     */
+    public static void afficherJeuCharge(Plateau p1, Plateau p3) {
+        Plateau p2 = new Plateau();
+        int a;
+        String c;
+        
+        String[][] grilleJoueur = new String[32][32];
+        String[][] grilleApercuIA = new String[32][32];
+        String[][] grilleIA = new String[32][32];
+
+        grilleJoueur = p1.initGrille();
+        //p1.initPlacementNavires();
+        p1.placementNaviresCharges();
+        //grilleApercuIA = p2.initGrille();
+
+       
+        p1.afficherPlateau();
+       
+       // p2.lien(grilleIA);
+        System.out.println("\n");
+        //p2.afficherPlateau();
+        System.out.println("\n");
+        Scanner s = new Scanner(System.in);
+        while (true) {
+            System.out.println("");
+            System.out.println("##################################");
+            System.out.println("tour suivant");
+            System.out.println("Entrez \"q\" pour quitter la partie en cours");
+            System.out.println("##################################");
+            System.out.println("");
+            System.out.print("Entrer une lettre : ");
+            c = s.next();
+            if(c.equals("q")){
+                String nom = "";
+                System.out.println("Entre le nom du fichier de sauvergarde: ");
+                nom = s.next();
+                cheminJ1 = Plateau.savePartie(p1, nom);
+                cheminApercu = Plateau.savePartie(p2, nom+"Apercu");
+                cheminIA = Plateau.savePartie(p3, nom+"IA");
+                System.out.println(cheminJ1);
+                return;
+            }
+            System.out.print("Entrer un  nombre : ");
+            a = s.nextInt();
+            
+        }
+    }
+
 
     /**
      *
@@ -103,8 +166,12 @@ public class BatailleNavale {
                     case 2:
                         System.out.println("Choisir le ficher en question :");
                         System.out.println(" ");
-                        Plateau.chargerPartie(chemin, essai);
+                        //Plateau.chargerPartie(chemin, essai);
                         System.out.println("-------------------------------------------------------------------------------------");
+                        Plateau pJ1 = Plateau.chargerPartie("aa.txt");
+		                //Plateau pApercu = Plateau.chargerPartie("aaApercu.txt");
+		                Plateau pIA = Plateau.chargerPartie("aaIA.txt");                
+		                afficherJeuCharge(pJ1, pIA);
                         Menu();
                         break;
 

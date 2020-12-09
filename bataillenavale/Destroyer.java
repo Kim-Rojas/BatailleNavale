@@ -21,9 +21,9 @@ public class Destroyer extends Navire {
         this.fusee = 1;
     }
 
-    public Destroyer(ArrayList<Pair> tabPos) {
+    public Destroyer (ArrayList<Pair> tabPos, int sensNav){
         this.nom = "Destroyer";
-        this.sens = 0;
+        this.sens = sensNav;
         this.taille = 3;
         this.puissance = 1;
         this.fusee = 1;

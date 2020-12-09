@@ -18,9 +18,9 @@ public class SousMarin extends Navire {
         this.puissance = 1;
     }
 
-    public SousMarin(ArrayList<Pair> tabPos) {
+    public SousMarin(ArrayList<Pair> tabPos, int sensNav){
         this.nom = "Sous-Marin";
-        this.sens = 0;
+        this.sens = sensNav;
         this.taille = 1;
         this.puissance = 1;
         this.tabPos = tabPos;

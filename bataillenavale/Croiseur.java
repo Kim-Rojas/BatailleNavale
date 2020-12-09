@@ -18,9 +18,9 @@ public class Croiseur extends Navire {
         this.puissance = 4;
     }
     
-    public Croiseur(ArrayList<Pair> tabPos){
+    public Croiseur(ArrayList<Pair> tabPos, int sensNav){
         this.nom = "Croiseur";
-        this.sens = 0;
+        this.sens = sensNav;
         this.taille = 5;
         this.puissance = 4;
         this.tabPos = tabPos;
