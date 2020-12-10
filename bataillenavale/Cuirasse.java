@@ -17,6 +17,8 @@ public class Cuirasse extends Navire {
         this.sens = 0;
         this.taille = 7;
         this.puissance = 9;
+        this.coordonnes = new Pair(0,0);
+        this.indice = 0;
     }
     
     public Cuirasse(ArrayList<Pair> tabPos, int sensNav) {

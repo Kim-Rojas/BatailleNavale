@@ -19,6 +19,8 @@ public abstract class Navire {
     protected int posY;
     protected boolean estTouche;
     protected boolean estCoule;
+    protected Pair coordonnes;
+    protected int indice;
     protected ArrayList<Pair> tabPos = new ArrayList<>();
     
     /**

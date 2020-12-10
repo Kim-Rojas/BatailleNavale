@@ -16,6 +16,8 @@ public Croiseur(String nom){
         this.sens = 0;
         this.taille = 5;
         this.puissance = 4;
+        this.coordonnes = new Pair(0,0);
+        this.indice = 0;
     }
     
     public Croiseur(ArrayList<Pair> tabPos, int sensNav){

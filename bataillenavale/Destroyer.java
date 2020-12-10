@@ -19,6 +19,8 @@ public class Destroyer extends Navire {
         this.taille = 3;
         this.puissance = 1;
         this.fusee = 1;
+        this.coordonnes = new Pair(0,0);
+        this.indice = 0;
     }
 
     public Destroyer (ArrayList<Pair> tabPos, int sensNav){
@@ -67,8 +69,8 @@ public class Destroyer extends Navire {
             }
             fusee = 0;
         }*/
-        if (!" ".equals(tab[ligne][colonne]) && !tab[ligne][colonne].equals("s"))
-            tab[ligne][colonne]="X";
+            if (!" ".equals(tab[ligne][colonne]) && !tab[ligne][colonne].equals("s"))
+                tab[ligne][colonne]="X";
         }
 
     @Override

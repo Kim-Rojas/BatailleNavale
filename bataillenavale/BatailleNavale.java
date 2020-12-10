@@ -70,21 +70,36 @@ public class BatailleNavale {
         return  ans;
     }
     
-    public static String selectionOption(Scanner s){
+    public static String selectionOption(Scanner s, int[] nav, Plateau p){
         boolean success = false;
         String option = "";
+        String name = "";
         
+        switch (p.grille[nav[0]][nav[1]]){
+            case "C":
+                name = "Cuirasse";
+                break;
+            case "c":
+                name = "Croiseur";
+                break;
+            case "d":
+                name = "Destroyer";
+                break;
+            case "s":
+                name = "Sous-marin";
+                break;
+        }
         while (success == false){
                 try {
-                    System.out.print("Voulez-vous tirer ou déplacer le navire (t/d) : ");
+                    System.out.print("Navire : "+name+". Voulez-vous tirer ou déplacer le navire (t/d) : ");
                     option = s.next();
                     if (!option.equals("t") && !option.equals("d")){
                         System.out.println("Erreur dans votre saisi");
-                        selectionOption(s);
+                        selectionOption(s, nav, p);
                     }
                 }catch (InputMismatchException ime){
                     System.out.println("Erreur dans votre saisi");
-                    selectionOption(s);
+                    selectionOption(s, nav, p);
                 }
                 success = true;
         }
@@ -139,24 +154,34 @@ public class BatailleNavale {
 
         grilleIA = p3.initGrille();
         p3.initPlacementNavires();
-        
         while (p1.verifierPartieFinie() == false && p3.verifierPartieFinie() == false){ //boucle de jeu
-            p1.afficherPlateau();
             p2.lien(grilleIA);
-            System.out.println("\n");
+            p1.afficherPlateau();
+            System.out.println("");
             p2.afficherPlateau();
-            System.out.println("\n");
+            System.out.println("");
+            p3.afficherPlateau();
+            System.out.println("");
+            p3.checkNavireCoule(); // ne fonctionne pas encore correctement
             choixN = selectionNavire(s, p1);
-            option = selectionOption(s);
+            option = selectionOption(s, choixN, p1);
             if (option.equals("t")){
                 choixT = selectionTire(s);
+                System.out.println("");
                 switch(p1.grille[choixN[0]][choixN[1]]){
                     case "C":
-                        p1.navires.get(0).tirer(choixT[0], choixT[1], grilleIA);
+                        for (Navire n : p1.navires){
+                            if(n.nom.charAt(0) == 'C'){
+                                System.out.println("x="+choixT[0]+" y="+choixT[1]);
+                                n.tirer(choixT[0], choixT[1], grilleIA);
+                                break;
+                            }
+                        }
                         break;
                     case "c":
                         for (Navire n : p1.navires){
                             if(n.nom.charAt(0) == 'c'){
+                                System.out.println("x="+choixT[0]+" y="+choixT[1]);
                                 n.tirer(choixT[0], choixT[1], grilleIA);
                                 break;
                             }
@@ -165,6 +190,7 @@ public class BatailleNavale {
                     case "d":
                         for (Navire n : p1.navires){
                             if(n.nom.charAt(0) == 'd'){
+                                System.out.println("x="+choixT[0]+" y="+choixT[1]);
                                 n.tirer(choixT[0], choixT[1], grilleIA);
                                 break;
                             }
@@ -173,6 +199,7 @@ public class BatailleNavale {
                     case "s":
                         for (Navire n : p1.navires){
                             if(n.nom.charAt(0) == 's'){
+                                System.out.println("x="+choixT[0]+" y="+choixT[1]);
                                 n.tirer(choixT[0], choixT[1], grilleIA);
                                 break;
                             }
@@ -184,6 +211,7 @@ public class BatailleNavale {
                 //déplacer
             }
         }
+        
     }
     
     public static void afficherJeuCharge(Plateau p1, Plateau p3) {
@@ -265,6 +293,7 @@ public class BatailleNavale {
                 afficherMenu(); int incertionChoix = choix.nextInt();
                 switch (incertionChoix) {
                     case 1:
+                        System.out.println("");
                         afficherJeu();
                         break;
                     case 2:
