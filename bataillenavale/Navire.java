@@ -1,4 +1,4 @@
-package com.mycompany.bataillenavale;
+package bataillenavale;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import javafx.util.Pair;
 */
 
 public abstract class Navire {
-	protected String nom;
+    protected String nom;
     protected int sens;
     protected int taille;
     protected int puissance;
@@ -19,7 +19,7 @@ public abstract class Navire {
     protected int posY;
     protected boolean estTouche;
     protected boolean estCoule;
-    protected ArrayList<Pair> tabPos = new ArrayList<Pair>();
+    protected ArrayList<Pair> tabPos = new ArrayList<>();
     
     /**
      *

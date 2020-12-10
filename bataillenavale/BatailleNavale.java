@@ -16,25 +16,122 @@ public class BatailleNavale {
 
     /**
      *
-     * @author Louis DUTTIER, Benjamin ROBSON, Kim ROJAS
+     * @author Louis DUTTIER, Benjamin ROBSON
      *
      */
-
+    
     final static String cheminFinal = "";
     private static String cheminJ1;
     private static String cheminIA;
     private static String cheminApercu;
+    
+    public static int charToInt(char c){
+        int x=1;
+        
+        for (char tmp = 'a'; tmp <= 'o'; tmp++){
+            if (c == tmp)
+                break;
+            x++;
+        }
+        return x;
+    }
+    
+    public static int[] selectionNavire(Scanner s, Plateau p){
+        boolean success = false;
+        String tmp = "";
+        int[] ans = new int[2];
+        int x = 0;
+        int y = 0;
+        
+        while (success == false){
+                try {
+                    System.out.print("Sélection d'un navire, ligne : ");
+                    tmp = s.next();
+                    System.out.print(" colonne : ");
+                    y = s.nextInt();
+                    if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'o' || tmp.length() > 1 || y < 0 || y > 14){
+                        System.out.println("Erreur dans votre saisi");
+                        selectionNavire(s,p);
+                    }
+                    x = charToInt(tmp.charAt(0));
+                    y = (y * 2) + 2;
+                    if (!"C".equals(p.grille[x][y]) && !"c".equals(p.grille[x][y]) && !"d".equals(p.grille[x][y]) && !"s".equals(p.grille[x][y])){
+                        System.out.println("Sélectionnez un navire !");
+                        selectionNavire(s,p);
+                    }
+                }catch (InputMismatchException ime) {
+                    System.out.println("Erreur dans votre saisi");
+                    selectionNavire(s,p);
+                }
+                success = true;
+        }
+        ans[0] = x;
+        ans[1] = y;
+        return  ans;
+    }
+    
+    public static String selectionOption(Scanner s){
+        boolean success = false;
+        String option = "";
+        
+        while (success == false){
+                try {
+                    System.out.print("Voulez-vous tirer ou déplacer le navire (t/d) : ");
+                    option = s.next();
+                    if (!option.equals("t") && !option.equals("d")){
+                        System.out.println("Erreur dans votre saisi");
+                        selectionOption(s);
+                    }
+                }catch (InputMismatchException ime){
+                    System.out.println("Erreur dans votre saisi");
+                    selectionOption(s);
+                }
+                success = true;
+        }
+        return option;
+    }
+    
+    public static int[] selectionTire(Scanner s){
+        boolean success = false;
+        String tmp = "";
+        int[] ans = new int[2];
+        int l = 0;
+        int c = 0;
+        
+        while (success == false){
+                try {
+                    System.out.print("Coordonnées de tire, ligne : ");
+                    tmp = s.next();
+                    System.out.print(" colonne : ");
+                    c = s.nextInt();
+                    if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'o' || tmp.length() > 1 || c < 0 || c > 14){
+                        System.out.println("Erreur dans votre saisi");
+                        selectionTire(s);
+                    }
+                    l = charToInt(tmp.charAt(0));
+                    c = (c * 2) + 2;
+                }catch (InputMismatchException ime) {
+                    System.out.println("Erreur dans votre saisi");
+                    selectionTire(s);
+                }
+                success = true;
+        }
+        ans[0] = l;
+        ans[1] = c;
+        return  ans;
+    }
 
     public static void afficherJeu() {
         Plateau p1 = new Plateau();
         Plateau p2 = new Plateau();
         Plateau p3 = new Plateau();
-        int a;
-        String c;
-
+        Scanner s = new Scanner(System.in);
         String[][] grilleJoueur = new String[32][32];
         String[][] grilleApercuIA = new String[32][32];
         String[][] grilleIA = new String[32][32];
+        String option = "";
+        int[] choixN = new int[2];
+        int[] choixT = new int[2];
 
         grilleJoueur = p1.initGrille();
         p1.initPlacementNavires();
@@ -42,43 +139,53 @@ public class BatailleNavale {
 
         grilleIA = p3.initGrille();
         p3.initPlacementNavires();
-        p1.afficherPlateau();
-        p1.navires.get(6).tirer(8, 16, grilleIA);
-        p1.navires.get(0).tirer(6, 8, grilleIA);
-        p1.navires.get(0).tirer(2, 4, grilleIA);
-        p2.lien(grilleIA);
-        System.out.println("\n");
-        p2.afficherPlateau();
-        System.out.println("\n");
-        Scanner s = new Scanner(System.in);
-        while (true) {
-            System.out.println("");
-            System.out.println("##################################");
-            System.out.println("tour suivant");
-            System.out.println("Entrez \"q\" pour quitter la partie en cours");
-            System.out.println("##################################");
-            System.out.println("");
-            System.out.println("Entrer une lettre : ");
-            c = s.next();
-            if(c.equals("q")){
-                String nom = "";
-                System.out.println("Entre le nom du fichier de sauvergarde: ");
-                nom = s.next();
-                cheminJ1 = Plateau.savePartie(p1, nom);
-                cheminApercu = Plateau.savePartie(p1, nom+"Apercu");
-                cheminIA = Plateau.savePartie(p3, nom+"IA");
-                return;
+        
+        while (p1.verifierPartieFinie() == false && p3.verifierPartieFinie() == false){ //boucle de jeu
+            p1.afficherPlateau();
+            p2.lien(grilleIA);
+            System.out.println("\n");
+            p2.afficherPlateau();
+            System.out.println("\n");
+            choixN = selectionNavire(s, p1);
+            option = selectionOption(s);
+            if (option.equals("t")){
+                choixT = selectionTire(s);
+                switch(p1.grille[choixN[0]][choixN[1]]){
+                    case "C":
+                        p1.navires.get(0).tirer(choixT[0], choixT[1], grilleIA);
+                        break;
+                    case "c":
+                        for (Navire n : p1.navires){
+                            if(n.nom.charAt(0) == 'c'){
+                                n.tirer(choixT[0], choixT[1], grilleIA);
+                                break;
+                            }
+                        }
+                        break;
+                    case "d":
+                        for (Navire n : p1.navires){
+                            if(n.nom.charAt(0) == 'd'){
+                                n.tirer(choixT[0], choixT[1], grilleIA);
+                                break;
+                            }
+                        }
+                        break;
+                    case "s":
+                        for (Navire n : p1.navires){
+                            if(n.nom.charAt(0) == 's'){
+                                n.tirer(choixT[0], choixT[1], grilleIA);
+                                break;
+                            }
+                        }
+                        break;
+                }
             }
-            System.out.println("Entrer un  nombre : ");
-            a = s.nextInt();
+            else{
+                //déplacer
+            }
         }
     }
-
-    /**
-     *
-     * @author Kim ROJAS
-     *
-     */
+    
     public static void afficherJeuCharge(Plateau p1, Plateau p3) {
         Plateau p2 = new Plateau();
         int a;
@@ -126,7 +233,6 @@ public class BatailleNavale {
         }
     }
 
-
     /**
      *
      * @author Louis DUTTIERS
@@ -140,7 +246,7 @@ public class BatailleNavale {
         System.out.println("3 - Règles du jeu");
         System.out.println("4 - Quitter Mobile Naval");
         System.out.println(" ");
-        System.out.println("Veuillez saisir un Nombre : ");
+        System.out.print("Veuillez saisir un Nombre : ");
     }
     
     /**
@@ -152,8 +258,6 @@ public class BatailleNavale {
     public static void Menu() {
 
         boolean success = false;
-        String chemin = "";
-        Plateau essai = new Plateau();
         Scanner choix = new Scanner(System.in);
 
         while (!success) {
@@ -166,12 +270,7 @@ public class BatailleNavale {
                     case 2:
                         System.out.println("Choisir le ficher en question :");
                         System.out.println(" ");
-                        //Plateau.chargerPartie(chemin, essai);
                         System.out.println("-------------------------------------------------------------------------------------");
-                        Plateau pJ1 = Plateau.chargerPartie("aa.txt");
-		                //Plateau pApercu = Plateau.chargerPartie("aaApercu.txt");
-		                Plateau pIA = Plateau.chargerPartie("aaIA.txt");                
-		                afficherJeuCharge(pJ1, pIA);
                         Menu();
                         break;
 

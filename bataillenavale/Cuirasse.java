@@ -1,4 +1,4 @@
-package com.mycompany.bataillenavale;
+package bataillenavale;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -12,8 +12,8 @@ import javafx.util.Pair;
 
 public class Cuirasse extends Navire {
 
-	public Cuirasse(){
-        this.nom = "Cuirasse";
+	public Cuirasse(String nom){
+        this.nom = nom;
         this.sens = 0;
         this.taille = 7;
         this.puissance = 9;
@@ -29,9 +29,27 @@ public class Cuirasse extends Navire {
 
     @Override
     public void tirer(int ligne, int colonne, String[][] tab) {
-        for (int i = ligne; i < ligne+3; i++){
-            for (int j = colonne; j< colonne+6; j+=2){
-                if (!" ".equals(tab[i][j]) && !"s".equals(tab[i][j]) && tab[i][j] != null)
+        int cptl = 3;
+        int cptc = 6;
+        switch(ligne){
+            case 14:
+                cptl -= 1;
+                break;
+            case 15:
+                cptl -= 2;
+                break;
+        }
+        switch(colonne){
+            case 28:
+                cptc -= 2;
+                break;
+            case 30:
+                cptc -= 4;
+                break;
+        }
+        for (int i = ligne; i<ligne+cptl; i++){
+            for (int j = colonne; j<colonne+cptc; j+=2){
+                if (!tab[i][j].equals(" ") && !tab[i][j].equals("s"))
                     tab[i][j] = "X";
             }
         }

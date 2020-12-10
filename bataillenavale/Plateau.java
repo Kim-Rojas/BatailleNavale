@@ -1,18 +1,12 @@
 package bataillenavale;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.sun.org.apache.xml.internal.serializer.Serializer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.sun.org.apache.xml.internal.serialize.Serializer;
 import javafx.util.Pair;
-
-
 
 
 /**
@@ -23,14 +17,14 @@ import javafx.util.Pair;
 
 public class Plateau {
     String[][] grille;
-        ArrayList<Navire> navires;
+    ArrayList<Navire> navires;
 
     public Plateau() {
         this.grille = new String[16][32];
-        this.navires = new ArrayList<Navire>();
+        this.navires = new ArrayList();
     }
 
-    public Plateau(ArrayList tabNav) {
+    public Plateau(ArrayList<Navire> tabNav) {
         this.grille = new String[16][32];
         this.navires = tabNav;
     }
@@ -77,26 +71,13 @@ public class Plateau {
     }
 
     public void initNavire() {
-        Cuirasse cuirasse = new Cuirasse();
-        Croiseur c1 = new Croiseur();
-        Croiseur c2 = new Croiseur();
-        Destroyer d1 = new Destroyer();
-        Destroyer d2 = new Destroyer();
-        Destroyer d3 = new Destroyer();
-        SousMarin sm1 = new SousMarin();
-        SousMarin sm2 = new SousMarin();
-        SousMarin sm3 = new SousMarin();
-        SousMarin sm4 = new SousMarin();
-        navires.add(cuirasse);
-        navires.add(c1);
-        navires.add(c2);
-        navires.add(d1);
-        navires.add(d2);
-        navires.add(d3);
-        navires.add(sm1);
-        navires.add(sm2);
-        navires.add(sm3);
-        navires.add(sm4);
+        navires.add(new Cuirasse("C"));
+        for (int i=1; i<3; i++)
+            navires.add(new Croiseur("c"+i));
+        for (int j=1; j<4;  j++)
+            navires.add(new Destroyer("d"+j));
+        for (int k=1; k<5; k++)
+            navires.add(new SousMarin("s"+k));
     }
 
     public void initPlacementNavires() {
@@ -187,7 +168,7 @@ public class Plateau {
             }
         }
     }
-    
+
     public void placementNaviresCharges(){
         int k=0;
         for(int i=0; i<this.navires.size(); i++){
@@ -238,7 +219,7 @@ public class Plateau {
             k++;
         }
     }
-
+    
     public void afficherPlateau() {
         // affichage dans la console du tableau
 
@@ -249,13 +230,16 @@ public class Plateau {
             System.out.println("");
         }
     }
-
+    
     public void lien(String[][] tab) {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 32; j++) {
-                if ("X".equals(tab[i][j])) {
+                if ("X".equals(tab[i][j]))
                     grille[i][j] = "X";
-                }
+                if ("o".equals(tab[i][j]))
+                    grille[i][j] = "o";
+                if ("n".equals(tab[i][j]))
+                    grille[i][j] = "n";
             }
         }
     }
@@ -286,23 +270,21 @@ public class Plateau {
         return true;
     }
 
-    public void verifierPartieFinie() {
+    public boolean verifierPartieFinie() {
         Boolean isFinie = true;
         for (int i = 1; i < 16; i++) {
             for (int j = 1; j < 32; j++) {
-                if (grille[i][j] == "d" || grille[i][j] == "c" || grille[i][j] == "C" || grille[i][j] == "s") {
+                if (grille[i][j] == "d" || grille[i][j] == "c" || grille[i][j] == "C" || grille[i][j] == "s") 
                     isFinie = false;
-                }
             }
         }
 
-        if (isFinie == true) {
-            System.out.println("La partie est termin�e");
-            return;
-        }
+        if (isFinie == true) 
+            System.out.println("La partie est terminée");
+        return isFinie;
     }
 
- public static String savePartie(Plateau p, String nomFichier) {
+    public static String savePartie(Plateau p, String nomFichier) {
         
         File fichierSauvegarde = new File(nomFichier+".txt");
 
@@ -331,14 +313,7 @@ public class Plateau {
         return fichierSauvegarde.getAbsolutePath();
 
     }
- 
-//    public static ArrayList saveApercu(){
-//        ArrayList<Pair> tabPosN = new ArrayList<Pair>();
-//        
-//        return tabPosN;
-//    }
-//    
-//    
+   
     public static Plateau chargerPartie(String chemin) {
         int i = 1;
         String[] tab = new String[4];

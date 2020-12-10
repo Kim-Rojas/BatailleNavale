@@ -1,4 +1,4 @@
-package com.mycompany.bataillenavale;
+package bataillenavale;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ import javafx.util.Pair;
 
 public class Croiseur extends Navire {
     
-	public Croiseur(){
-        this.nom = "Croiseur";
+public Croiseur(String nom){
+        this.nom = nom;
         this.sens = 0;
         this.taille = 5;
         this.puissance = 4;
@@ -28,14 +28,18 @@ public class Croiseur extends Navire {
 
     @Override
     public void tirer(int ligne, int colonne, String[][] tab) {
-        if (!" ".equals(tab[ligne][colonne]) && !"s".equals(tab[ligne][colonne]) && tab[ligne][colonne] != null)
-            tab[ligne][colonne] = "X";
-        if (!" ".equals(tab[ligne][colonne+2]) && !"s".equals(tab[ligne][colonne+2]) && tab[ligne][colonne+2] != null)
-            tab[ligne][colonne+1] = "X";
-        if (!" ".equals(tab[ligne+1][colonne]) && !"s".equals(tab[ligne+1][colonne]) && tab[ligne+1][colonne] != null)
-            tab[ligne+1][colonne] =  "X";
-        if  (!" ".equals(tab[ligne+1][colonne+2]) && !"s".equals(tab[ligne+1][colonne+2]) && tab[ligne+1][colonne+2] != null)
-            tab[ligne+1][colonne+2] = "X";
+        int cptl = 2;
+        int cptc = 4;
+        if (ligne == 15)
+            cptl -= 1;
+        if (colonne == 30)
+            cptc -= 2;
+        for (int i = ligne; i<ligne+cptl; i++){
+            for (int j = colonne; j<colonne+cptc; j+=2){
+                if (!tab[i][j].equals(" ") && !tab[i][j].equals("s"))
+                    tab[i][j] = "X";
+            }
+        }
     }
 
     @Override

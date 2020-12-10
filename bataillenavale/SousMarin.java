@@ -1,4 +1,4 @@
-package com.mycompany.bataillenavale;
+package bataillenavale;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ import javafx.util.Pair;
  */
 public class SousMarin extends Navire {
 
-    public SousMarin() {
-        this.nom = "Sous-Marin";
+    public SousMarin(String nom) {
+        this.nom = nom;
         this.sens = 0;
         this.taille = 1;
         this.puissance = 1;
@@ -28,9 +28,8 @@ public class SousMarin extends Navire {
 
     @Override
     public void tirer(int ligne, int colonne, String[][] tab) {
-        if (!" ".equals(tab[ligne][colonne]) && tab[ligne][colonne] != null) {
-            tab[ligne][colonne] = "X";
-        }
+        if (!" ".equals(tab[ligne][colonne]))
+            tab[ligne][colonne]="X";
     }
 
     @Override
