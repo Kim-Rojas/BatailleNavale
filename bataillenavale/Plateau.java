@@ -180,105 +180,91 @@ public class Plateau {
         int tmpx = 0;
         int tmpy = 0;
         int cpt = 0;
-        for (Navire n: navires){
-            tmpx = (int)n.coordonnes.getKey();
-            tmpy = (int)n.coordonnes.getValue();
-            if (n.sens == 0){
-                switch (n.taille){
+        for (int i=0; i<navires.size(); i++){
+            tmpx = (int)navires.get(i).coordonnes.getKey();
+            tmpy = (int)navires.get(i).coordonnes.getValue();
+            cpt = 0;
+            if (navires.get(i).sens == 0){
+                switch (navires.get(i).taille){
                     case 1:
-                        if (grille[tmpx][tmpy].equals("X")){
-                            System.out.println("Sous-marin coulé !");
-                            n.indice = 1;
+                        if (grille[tmpx][tmpy].equals("X") && navires.get(i).indice != 1){
+                            System.out.println("Sous-marin coulé !\n");
+                            navires.get(i).indice = 1;
                         }
                         break;
                     case 3:
-                        for (int i = tmpx; i > tmpx-n.taille; i--){
-                            if (grille[i][tmpy].equals("X"))
+                        for (int j = tmpx; j > tmpx-navires.get(i).taille; j--){
+                            if (grille[j][tmpy].equals("X"))
                                 cpt++;
                         }
-                        if (cpt == n.taille){
-                            System.out.println(n.nom);
-                            System.out.println("Destroyer coulé !");
-                            n.indice = 1;
+                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1){
+                            System.out.println("Destroyer coulé !\n");
+                            navires.get(i).indice = 1;
                         }
                         break;
                     case 5:
-                        for (int i = tmpx; i > tmpx-n.taille; i--){
-                            if (grille[i][tmpy].equals("X"))
+                        for (int j = tmpx; j > tmpx-navires.get(i).taille; j--){
+                            if (grille[j][tmpy].equals("X"))
                                 cpt++;
                         }
-                        if (cpt == n.taille){
-                            System.out.println(n.nom);
-                            System.out.println("Croiseur coulé !");
-                            n.indice = 1;
+                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1){
+                            System.out.println("Croiseur coulé !\n");
+                            navires.get(i).indice = 1;
                         }
                         break;
                     case 7:
-                        for (int i = tmpx; i > tmpx-n.taille; i--){
-                            if (grille[i][tmpy].equals("X"))
+                        for (int j = tmpx; j > tmpx-navires.get(i).taille; j--){
+                            if (grille[j][tmpy].equals("X"))
                                 cpt++;
                         }
-                        if (cpt == n.taille){
-                            System.out.println(n.nom);
-                            System.out.println("Cuirasse coulé !");
-                            n.indice = 1;
+                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1){
+                            System.out.println("Cuirasse coulé !\n");
+                            navires.get(i).indice = 1;
                         }
                         break;
                 }
             }
             else{
-                switch (n.taille){
+                switch (navires.get(i).taille){
                     case 1:
-                        if (grille[tmpx][tmpy].equals("X")){
-                            System.out.println("Sous-marin coulé !");
-                            n.indice = 1;
+                        if (grille[tmpx][tmpy].equals("X") && navires.get(i).indice != 1){
+                            System.out.println("Sous-marin coulé !\n");
+                            navires.get(i).indice = 1;
                         }
                         break;
                     case 3:
-                        for (int j = tmpy; j > tmpy-(n.taille*2); j-=2){
+                        for (int j = tmpy; j > tmpy-(navires.get(i).taille*2); j-=2){
                             if (grille[tmpx][j].equals("X"))
                                 cpt++;
                         }
-                        if (cpt == n.taille){
-                            System.out.println(n.nom);
-                            System.out.println("Destroyer coulé !");
-                            n.indice = 1;
+                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1){
+                            System.out.println("Destroyer coulé !\n");
+                            navires.get(i).indice = 1;
                         }
                         break;
                     case 5:
-                        for (int j = tmpy; j > tmpy-(n.taille*2); j-=2){
+                        for (int j = tmpy; j > tmpy-(navires.get(i).taille*2); j-=2){
                             if (grille[tmpx][j].equals("X"))
                                 cpt++;
                         }
-                        if (cpt == n.taille){
-                            System.out.println(n.nom);
-                            System.out.println("Croiseur coulé !");
-                            n.indice = 1;
+                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1){
+                            System.out.println("Croiseur coulé !\n");
+                            navires.get(i).indice = 1;
                         }
                         break;
                     case 7:
-                        for (int j = tmpy; j > tmpy-(n.taille*2); j-=2){
+                        for (int j = tmpy; j > tmpy-(navires.get(i).taille*2); j-=2){
                             if (grille[tmpx][j].equals("X"))
                                 cpt++;
                         }
-                        if (cpt == n.taille){
-                            System.out.println(n.nom);
-                            System.out.println("Cuirasse coulé !");
-                            n.indice = 1;
+                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1){
+                            System.out.println("Cuirasse coulé !\n");
+                            navires.get(i).indice = 1;
                         }
                         break;
                 }
             }
         }
-        for (int i = 0; i<navires.size(); i++){
-            if (navires.get(i).indice == 1){
-                System.out.println("Le navire "+navires.get(i).nom+ " est supprimé..");
-                navires.remove(i);
-            }
-        }
-        /*for (int i = 0; i<navires.size(); i++){
-            System.out.println("nom : "+navires.get(i).nom+", coord x="+navires.get(i).coordonnes.getKey()+" y="+navires.get(i).coordonnes.getValue());
-        }*/
     } 
     
     public void placementNaviresCharges(){
