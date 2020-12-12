@@ -106,7 +106,7 @@ public class BatailleNavale {
         return option;
     }
     
-    public static int[] selectionTire(Scanner s){
+    public static int[] selectionTir(Scanner s){
         boolean success = false;
         String tmp = "";
         int[] ans = new int[2];
@@ -115,19 +115,19 @@ public class BatailleNavale {
         
         while (success == false){
                 try {
-                    System.out.print("Coordonnées de tire, ligne : ");
+                    System.out.print("Coordonnées de tir, ligne : ");
                     tmp = s.next();
                     System.out.print(" colonne : ");
                     c = s.nextInt();
                     if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'o' || tmp.length() > 1 || c < 0 || c > 14){
                         System.out.println("Erreur dans votre saisi");
-                        selectionTire(s);
+                        selectionTir(s);
                     }
                     l = charToInt(tmp.charAt(0));
                     c = (c * 2) + 2;
                 }catch (InputMismatchException ime) {
                     System.out.println("Erreur dans votre saisi");
-                    selectionTire(s);
+                    selectionTir(s);
                 }
                 success = true;
         }
@@ -166,7 +166,7 @@ public class BatailleNavale {
             choixN = selectionNavire(s, p1);
             option = selectionOption(s, choixN, p1);
             if (option.equals("t")){
-                choixT = selectionTire(s);
+                choixT = selectionTir(s);
                 System.out.println("");
                 switch(p1.grille[choixN[0]][choixN[1]]){
                     case "C":
