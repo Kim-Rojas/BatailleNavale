@@ -40,7 +40,7 @@ public class BatailleNavale {
         return x;
     }
     
-    public static int[] selectionNavire(Scanner s, Plateau p){
+    public static int[] selectionNavire(Scanner s, Plateau p1, Plateau p2, Plateau p3){
         boolean success = false;
         String tmp = "";
         int[] ans = new int[2];
@@ -51,21 +51,30 @@ public class BatailleNavale {
                 try {
                     System.out.print("Sélection d'un navire, ligne : ");
                     tmp = s.next();
+                    if ("q".equals(tmp)) {
+                        String nom = "";
+                        System.out.println("Entre le nom du fichier de sauvegarde: ");
+                        nom = s.next();
+                        cheminJ1 = Plateau.savePartie(p1, nom);
+                        cheminApercu = Plateau.saveApercu(p2, nom + "Apercu");
+                        cheminIA = Plateau.savePartie(p3, nom + "IA");
+                        System.exit(0);
+                    }
                     System.out.print(" colonne : ");
                     y = s.nextInt();
                     if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'o' || tmp.length() > 1 || y < 0 || y > 14){
                         System.out.println("Erreur dans votre saisi");
-                        selectionNavire(s,p);
+                        selectionNavire(s,p1,p2,p3);
                     }
                     x = charToInt(tmp.charAt(0));
                     y = (y * 2) + 2;
-                    if (!"C".equals(p.grille[x][y]) && !"c".equals(p.grille[x][y]) && !"d".equals(p.grille[x][y]) && !"s".equals(p.grille[x][y])){
+                    if (!"C".equals(p1.grille[x][y]) && !"c".equals(p1.grille[x][y]) && !"d".equals(p1.grille[x][y]) && !"s".equals(p1.grille[x][y])){
                         System.out.println("Sélectionnez un navire !");
-                        selectionNavire(s,p);
+                        selectionNavire(s,p1,p2,p3);
                     }
                 }catch (InputMismatchException ime) {
                     System.out.println("Erreur dans votre saisi");
-                    selectionNavire(s,p);
+                    selectionNavire(s,p1,p2,p3);
                 }
                 success = true;
         }
@@ -167,7 +176,7 @@ public class BatailleNavale {
             p3.afficherPlateau();
             System.out.println("");
             p3.checkNavireCoule(); 
-            choixN = selectionNavire(s, p1);
+            choixN = selectionNavire(s, p1, p2, p3);
             option = selectionOption(s, choixN, p1);
             if (option.equals("t")){
                 choixT = selectionTir(s);
@@ -247,10 +256,10 @@ public class BatailleNavale {
             c = s.next();
             if(c.equals("q")){
                 String nom = "";
-                System.out.println("Entre le nom du fichier de sauvergarde: ");
+                System.out.println("Entre le nom du fichier de sauvegarde: ");
                 nom = s.next();
                 cheminJ1 = Plateau.savePartie(p1, nom);
-                cheminApercu = Plateau.savePartie(p2, nom+"Apercu");
+                cheminApercu = Plateau.saveApercu(p2, nom+"Apercu");
                 cheminIA = Plateau.savePartie(p3, nom+"IA");
                 System.out.println(cheminJ1);
                 return;

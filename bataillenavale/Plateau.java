@@ -71,13 +71,13 @@ public class Plateau {
     }
 
     public void initNavire() {
-        navires.add(new Cuirasse("C"));
+        navires.add(new Cuirasse("Cuirasse"));
         for (int i=1; i<3; i++)
-            navires.add(new Croiseur("c"+i));
+            navires.add(new Croiseur("Croiseur"));
         for (int j=1; j<4;  j++)
-            navires.add(new Destroyer("d"+j));
+            navires.add(new Destroyer("Destroyer"));
         for (int k=1; k<5; k++)
-            navires.add(new SousMarin("s"+k));
+            navires.add(new SousMarin("Sous-Marin"));
     }
 
     public void initPlacementNavires() {
@@ -411,7 +411,40 @@ public class Plateau {
         return fichierSauvegarde.getAbsolutePath();
 
     }
-   
+ 
+    public static String saveApercu(Plateau p, String nomFichier){
+        File fichierSauvegarde = new File(nomFichier+".txt");
+
+        try {
+            FileWriter writer = new FileWriter(fichierSauvegarde);
+            for (int i = 0; i < 16; i++) {
+                for(int j=0; j<32; j++){
+                    if(p.grille[i][j].equals("X")){
+                        writer.write("X\n");
+                        writer.write(i+"\n");
+                        writer.write(j+"X\n");
+                    }
+                    writer.write("\n");
+                }
+            }
+            writer.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Serializer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println(fichierSauvegarde.getAbsolutePath());
+
+        return fichierSauvegarde.getAbsolutePath();
+    }
+ 
+    // dans l'ArrayList on a des paires de X et position
+    public static ArrayList chargerApercu(){
+        ArrayList<Pair> tabPosN = new ArrayList<Pair>();
+        
+        return tabPosN;
+    }
+    
+    
     public static Plateau chargerPartie(String chemin) {
         int i = 1;
         String[] tab = new String[4];
