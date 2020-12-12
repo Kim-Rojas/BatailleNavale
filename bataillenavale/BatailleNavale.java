@@ -25,6 +25,10 @@ public class BatailleNavale {
     private static String cheminIA;
     private static String cheminApercu;
     
+    public static void IA(Plateau p1, Plateau p3){
+        
+    }
+    
     public static int charToInt(char c){
         int x=1;
         
@@ -115,7 +119,7 @@ public class BatailleNavale {
         
         while (success == false){
                 try {
-                    System.out.print("Coordonnées de tire, ligne : ");
+                    System.out.print("Coordonnées de tir, ligne : ");
                     tmp = s.next();
                     System.out.print(" colonne : ");
                     c = s.nextInt();
@@ -162,7 +166,7 @@ public class BatailleNavale {
             System.out.println("");
             p3.afficherPlateau();
             System.out.println("");
-            p3.checkNavireCoule(); // ne fonctionne pas encore correctement
+            p3.checkNavireCoule(); 
             choixN = selectionNavire(s, p1);
             option = selectionOption(s, choixN, p1);
             if (option.equals("t")){
@@ -172,7 +176,6 @@ public class BatailleNavale {
                     case "C":
                         for (Navire n : p1.navires){
                             if(n.nom.charAt(0) == 'C'){
-                                System.out.println("x="+choixT[0]+" y="+choixT[1]);
                                 n.tirer(choixT[0], choixT[1], grilleIA);
                                 break;
                             }
@@ -181,7 +184,6 @@ public class BatailleNavale {
                     case "c":
                         for (Navire n : p1.navires){
                             if(n.nom.charAt(0) == 'c'){
-                                System.out.println("x="+choixT[0]+" y="+choixT[1]);
                                 n.tirer(choixT[0], choixT[1], grilleIA);
                                 break;
                             }
@@ -190,7 +192,6 @@ public class BatailleNavale {
                     case "d":
                         for (Navire n : p1.navires){
                             if(n.nom.charAt(0) == 'd'){
-                                System.out.println("x="+choixT[0]+" y="+choixT[1]);
                                 n.tirer(choixT[0], choixT[1], grilleIA);
                                 break;
                             }
@@ -199,7 +200,6 @@ public class BatailleNavale {
                     case "s":
                         for (Navire n : p1.navires){
                             if(n.nom.charAt(0) == 's'){
-                                System.out.println("x="+choixT[0]+" y="+choixT[1]);
                                 n.tirer(choixT[0], choixT[1], grilleIA);
                                 break;
                             }
