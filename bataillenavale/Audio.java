@@ -13,8 +13,8 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
- *
- * @author Louis DUTTIER
+ * Classe permettant d'introduire un document audio
+ * 
  * @source
  * https://www.codejava.net/coding/how-to-play-back-audio-in-java-with-examples
  */
@@ -22,6 +22,10 @@ public class Audio implements LineListener {
 
     boolean playCompleted;
 
+    /**
+    * Recupère un fichier audio à partir du chemin du fichier
+    * @param audioPath le chemin du fichier audio à récuperer
+    */
     void play(String audioFilePath) {
         File audioFile = new File(audioFilePath);
 
