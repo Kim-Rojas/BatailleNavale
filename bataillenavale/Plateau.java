@@ -379,7 +379,7 @@ public class Plateau {
     }
 
     /**
-     *
+     * Fais le lien entre le plateau d'aperçu et le plateau de l'IA
      * @param tab
      */
     public void lien(String[][] tab) {
