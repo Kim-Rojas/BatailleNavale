@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import javafx.util.Pair;
 
 /**
-*
-* @author Kim ROJAS
+* Classe abstraite Navire
+* Contient les attributs nécessaires pour décrire un navire et les méthodes à implémenter
 * 
 */
 
@@ -22,18 +22,26 @@ public abstract class Navire {
     protected ArrayList<Pair> tabPos = new ArrayList<>();
     
     /**
-     *
+     * permet à un navire de tirer sur une case de l'adversaire choisie
+     * 
      * @param ligne
      * @param colonne
      * @param tab
      */
-    
-    
     public abstract void tirer(int ligne, int colonne, String[][] tab);
     
+    
+    /**
+     * déplacement du croiseur dans une direction donnée
+     * 
+     * @param e
+     * @param direction
+     * @param ligne
+     * @param colonne 
+     */
     public int deplacer(char direction, String[][] tab, int joueur){
-        int tmpx = (int)this.coordonnes.getKey();
-        int tmpy = (int)this.coordonnes.getValue();
+        int tmpx = Integer.parseInt(this.tabPos.get(this.taille-1).getKey().toString());
+        int tmpy = Integer.parseInt(this.tabPos.get(this.taille-1).getValue().toString());
         if (this.sens == 0){ // déplacement vertical
             for (int j = tmpx; j > tmpx-this.taille; j--){
                 if (tab[j][tmpy].equals("X")){

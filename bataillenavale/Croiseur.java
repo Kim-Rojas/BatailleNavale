@@ -11,7 +11,10 @@ import javafx.util.Pair;
 
 public class Croiseur extends Navire {
     
-public Croiseur(){
+    /**
+     * Constructeur sans paramètres
+     */
+    public Croiseur(){
         this.nom = "Croiseur";
         this.sens = 0;
         this.taille = 5;
@@ -20,6 +23,12 @@ public Croiseur(){
         this.indice = 0;
     }
     
+    /**
+     * Constructeur initialisant un Croiseur avec les positions et son sens 
+     * 
+     * @param tabPos l'ensemble des coordonnées du navire sur la grille
+     * @param sensNav son orientation (horizontal ou vertical)
+     */
     public Croiseur(ArrayList<Pair> tabPos, int sensNav){
         this.nom = "Croiseur";
         this.sens = sensNav;
@@ -28,6 +37,13 @@ public Croiseur(){
         this.tabPos = tabPos;
     }
 
+    /**
+     * tir du croiseur qui dévoile un carré de 4 cases dans la grille adverse
+     * 
+     * @param ligne 
+     * @param colonne
+     * @param tab 
+     */
     @Override
     public void tirer(int ligne, int colonne, String[][] tab) {
         int cptl = 2;

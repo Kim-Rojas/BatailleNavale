@@ -12,6 +12,9 @@ import javafx.util.Pair;
 
 public class Cuirasse extends Navire {
 
+    /**
+     * Constructeur sans paramètres
+     */
 	public Cuirasse(){
         this.nom = "Cuirasse";
         this.sens = 0;
@@ -21,6 +24,12 @@ public class Cuirasse extends Navire {
         this.indice = 0;
     }
     
+    /**
+     * Constructeur initialisant un Cuirasse avec les positions et son sens 
+     * 
+     * @param tabPos l'ensemble des coordonnées du navire sur la grille
+     * @param sensNav son orientation (horizontal ou vertical)
+     */
     public Cuirasse(ArrayList<Pair> tabPos, int sensNav) {
         this.nom = "Cuirasse";
         this.sens = sensNav;
@@ -29,6 +38,15 @@ public class Cuirasse extends Navire {
         this.tabPos = tabPos;
     }
 
+    /**
+     * tir du cuirasse qui dévoile un carré de 9 cases dans la grille adverse
+     * 
+     * @param ligne 
+     * @param colonne
+     * @param tab 
+     * 
+     * @author Benjamin ROBSON
+     */
     @Override
     public void tirer(int ligne, int colonne, String[][] tab) {
         int cptl = 3;

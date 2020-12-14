@@ -5,12 +5,16 @@ import java.util.ArrayList;
 import javafx.util.Pair;
 
 /**
- *
- * @author Benjamin ROBSON, Kim ROJAS
- *
+ * Classe SousMarin qui étend la classe abstraite Navire. 
+ * Elle crée des objets de type SousMarin, et implémente leur fonction de tir et de déplacement
+ * 
+ * @author Benjamin ROBSON, Kim ROJAS *
  */
 public class SousMarin extends Navire {
 
+    /**
+     * Constructeur sans parametres
+     */
     public SousMarin() {
         this.nom = "Sous-Marin";
         this.sens = 0;
@@ -20,6 +24,12 @@ public class SousMarin extends Navire {
         this.indice = 0;
     }
 
+    /**
+     * Constructeur initialisant un SousMarin avec les positions et son sens 
+     * 
+     * @param tabPos l'ensemble des coordonnées du navire sur la grille
+     * @param sensNav son orientation (horizontal ou vertical)
+     */
     public SousMarin(ArrayList<Pair> tabPos, int sensNav){
         this.nom = "Sous-Marin";
         this.sens = sensNav;
@@ -28,6 +38,13 @@ public class SousMarin extends Navire {
         this.tabPos = tabPos;
     }
 
+    /**
+     * tir du sous-marin qui dévoile 1 case dans la grille adverse
+     * 
+     * @param ligne 
+     * @param colonne
+     * @param tab 
+     */
     @Override
     public void tirer(int ligne, int colonne, String[][] tab) {
         if (!" ".equals(tab[ligne][colonne]))

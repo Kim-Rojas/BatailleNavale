@@ -10,6 +10,7 @@ import javafx.util.Pair;
 
 
 /**
+* Classe Plateau, initialise un plateau de jeu
 *
 * @author Louis DUTTIER, Benjamin ROBSON, Kim ROJAS
 * 
@@ -19,16 +20,31 @@ public class Plateau {
     String[][] grille;
     ArrayList<Navire> navires;
 
+    /**
+    * Constructeur sans paramètres initialisant un objet de type Plateau
+    */
     public Plateau() {
         this.grille = new String[16][32];
         this.navires = new ArrayList();
     }
 
+    /**
+     * Constructeur avec paramètre initialisant un objet de type Plateau
+     * @param tabNav une arraylist contenant les navires 
+     */
     public Plateau(ArrayList<Navire> tabNav) {
         this.grille = new String[16][32];
         this.navires = tabNav;
     }
 
+    /**
+     * Initialise la grille du plateau de jeu
+     * Complète la première ligne et la première colonne avec des coordonnées, 
+     * ainsi que le lignes de séparation des colonnes
+     * 
+     * @return la grille du jeu
+     * 
+     */
     public String[][] initGrille() {
         int n = 0;
         char c1 = 'a';
@@ -70,6 +86,9 @@ public class Plateau {
         return grille;
     }
 
+    /**
+     * Complète la liste de navires
+     */
     public void initNavire() {
         navires.add(new Cuirasse());
         for (int i=1; i<3; i++)
@@ -80,6 +99,9 @@ public class Plateau {
             navires.add(new SousMarin());
     }
 
+    /**
+     * Place aléatoirement les 10 navires du jeu
+     */
     public void initPlacementNavires() {
         int ligne;
         int colonne;
@@ -176,13 +198,16 @@ public class Plateau {
         }
     }
 
+    /**
+     * Vérifie si un navire est coulé
+     */
     public void checkNavireCoule(){ // pas encore complètement opérationnelles
         int tmpx = 0;
         int tmpy = 0;
         int cpt = 0;
         for (int i=0; i<navires.size(); i++){
-            tmpx = (int)navires.get(i).coordonnes.getKey();
-            tmpy = (int)navires.get(i).coordonnes.getValue();
+            tmpx = Integer.parseInt(navires.get(i).tabPos.get(navires.get(i).taille-1).getKey().toString());
+            tmpy = Integer.parseInt(navires.get(i).tabPos.get(navires.get(i).taille-1).getValue().toString());
             cpt = 0;
             if (navires.get(i).sens == 0){
                 switch (navires.get(i).taille){
@@ -271,6 +296,11 @@ public class Plateau {
         }
     }
     
+    /**
+     * permet de replacer les navires dans la grille en fonction de leurs 
+     * positions se trouvant dans l'attribut tabPos du navire sur lequel on
+     * appelle cette méthode
+     */
     public void placementNaviresCharges(){
         int k=0;
         for(int i=0; i<this.navires.size(); i++){
@@ -296,7 +326,7 @@ public class Plateau {
                 }
                 
             } 
-            // si le navire est plpace horizontalement
+            // si le navire est place horizontalement
             else {
                 int col = Integer.parseInt((String)this.navires.get(i).tabPos.get(0).getValue());
                 int ligne = Integer.parseInt((String)this.navires.get(i).tabPos.get(0).getKey());
@@ -322,6 +352,9 @@ public class Plateau {
         }
     }
     
+    /**
+     * Affiche le plateau de jeu
+     */
     public void afficherPlateau() {
         // affichage dans la console du tableau
 
@@ -333,6 +366,10 @@ public class Plateau {
         }
     }
     
+    /**
+     * 
+     * @param tab 
+     */
     public void lien(String[][] tab) {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 32; j++) {
@@ -346,6 +383,16 @@ public class Plateau {
         }
     }
 
+    /**
+     * Vérifie si le placement du navire est possible
+     * Vérifie que le navire ne dépasse pas du plateau
+     * 
+     * @param ligne
+     * @param colonne
+     * @param n
+     * @param sens
+     * @return true si le placement est correct
+     */
     public boolean checkPlacement(int ligne, int colonne, Navire n, int sens) {
         if (n.taille == 1 && !" ".equals(grille[ligne][colonne])) {
             return false;
@@ -372,20 +419,39 @@ public class Plateau {
         return true;
     }
 
+    /**
+     * parcours la grille de jeu pour vérifier s'il reste des navires non touchés
+     * 
+     * @return isFinie : true lorque tous les navires d'un plateau sont coulés ou qu'il n'y a plus de sous-marins
+     *                   false sinon
+     */
     public boolean verifierPartieFinie() {
         Boolean isFinie = true;
+        int cptS = 0;
+
         for (int i = 1; i < 16; i++) {
             for (int j = 1; j < 32; j++) {
-                if (grille[i][j] == "d" || grille[i][j] == "c" || grille[i][j] == "C" || grille[i][j] == "s") 
+                if (grille[i][j] == "d" || grille[i][j] == "c" || grille[i][j] == "C" || grille[i][j] == "s"){
                     isFinie = false;
+                    cptS++;
+                }      
             }
         }
 
-        if (isFinie == true) 
+        if (isFinie == true  || cptS > 0){
             System.out.println("La partie est terminée");
+        }
+
         return isFinie;
     }
 
+    /**
+     * sauvegarde une partie en cours
+     * 
+     * @param p le plateau à sauvegarder
+     * @param nomFichier le nom du fichier de destination
+     * @return le chemin du fichier texte correspondant à la partie sauvegardée
+     */
     public static String savePartie(Plateau p, String nomFichier) {
         
         File fichierSauvegarde = new File(nomFichier+".txt");
@@ -416,13 +482,51 @@ public class Plateau {
 
     }
    
+   /**
+     * sauvegarde le plateau d'aperçu des navires touchés chez l'adversaire
+     * 
+     * @param p le plateau d'aperçu
+     * @param nomFichier le nom du fichier de destination
+     * @return le chemin du fichier texte contenant les coordonnées des points touchés des navires
+     */
+    public static String saveApercu(Plateau p, String nomFichier) {
+        File fichierSauvegarde = new File(nomFichier + ".txt");
+
+        try {
+            FileWriter writer = new FileWriter(fichierSauvegarde);
+            for (int i = 0; i < 16; i++) {
+                for (int j = 0; j < 32; j++) {
+                    if (p.grille[i][j].equals("X")) {
+                        writer.write(i + "\n");
+                        writer.write(j + "\n");
+                    }
+                }
+
+            }
+            writer.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Serializer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        System.out.println(fichierSauvegarde.getAbsolutePath());
+
+        return fichierSauvegarde.getAbsolutePath();
+    }
+
+
+    /**
+     * charge le plateau de jeu à partir des informations stockées dans le fichier texte
+     * 
+     * @param chemin du fichier texte contenant les informations sur le plateau
+     * 
+     * @return un plateau initialisé avec une liste de navires récupérer dans le fichier
+     */
     public static Plateau chargerPartie(String chemin) {
         int i = 1;
         String[] tab = new String[4];
         ArrayList<Pair> tabPos;
         Navire navire = null;
         ArrayList<Navire> listeNavires = new ArrayList<Navire>();
-        Navire[] tabNavire = new Navire[10];
 
         Plateau plateau = null;
 
@@ -436,24 +540,18 @@ public class Plateau {
             while ((ligne = br.readLine()) != null) {
                 if (i % 5 == 1) {
                     tab[0] = ligne;
-                    //System.out.println(ligne);
                 }
                 else if (i % 5 == 2) {
-                    //System.out.println(ligne);
                     tab[1] = ligne;
                 }
                 else if (i % 5 == 3) {
-                    //System.out.println(ligne);
                     tab[2] = ligne;
                 }
                 else if (i % 5 == 4) {
-                    //System.out.println(ligne);
                     tab[3] = ligne;
 
                 }
                 else if (i % 5 == 0) {
-                    //System.out.println(ligne);
-
                     //recuperation des positions
                     tabPos = new ArrayList<Pair>();
                     String[] positions = ligne.split(" ");
@@ -481,9 +579,6 @@ public class Plateau {
 
             br.close();
 
-            for (int k = 0; k < 10; k++) {
-                tabNavire[k] = listeNavires.get(k);
-            }
             plateau = new Plateau(listeNavires);
 
         } catch (IOException e) {
@@ -493,5 +588,76 @@ public class Plateau {
         }
 
         return plateau;
+    }
+
+
+    /**
+     * charge le plateau de l'aperçu
+     * 
+     * @param chemin du fichier texte contenant les positions des X sur l'aperçu
+     * 
+     * @return une arraylist les coordonnées de chaque X
+     */
+    public static ArrayList chargerApercu(String chemin) {
+        ArrayList<Pair> tabPosN = new ArrayList<Pair>();
+        ArrayList<Integer> tabX = new ArrayList<Integer>();
+        ArrayList<Integer> tabY = new ArrayList<Integer>();
+        int i = 1;
+
+        int posX = 0;
+        int posY;
+
+        Plateau plateau = null;
+
+        try {
+            File f = new File(chemin);
+            FileReader fr = new FileReader(f);
+            BufferedReader br = new BufferedReader(fr);
+            String ligne = null; // contiendra chaque ligne
+            //int h = 0;
+
+            while ((ligne = br.readLine()) != null) {
+                if (i % 2 == 1) {
+                    tabX.add(Integer.parseInt(ligne));
+                } else if (i % 2 == 0) {
+                    tabY.add(Integer.parseInt(ligne));
+                }
+                i++;
+            }
+
+            br.close();
+
+            plateau = new Plateau();
+
+            for (int j = 0; j < tabX.size(); j++) {
+                tabPosN.add(new Pair(tabX.get(j), tabY.get(j)));
+            }
+
+        } catch (IOException e) {
+            System.out.println("Impossible de charger le plateau");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return tabPosN;
+    }
+
+    /**
+     * rempli le plateau de l'aperçu en mettant les X dans les bonnes cases 
+     * 
+     * @param p le plateau de l'aperçu
+     * @param listeX liste des coordonnées 
+     */
+    public static void remplirCasesX(Plateau p, ArrayList<Pair> listeX) {
+        
+        for (int i = 0; i < listeX.size(); i++) {
+            for (int j = 1; j < 16; j++) {
+                for (int k = 2; k < 30; k = k + 2) {
+                    if (listeX.get(i).getKey().equals(j) && listeX.get(i).getValue().equals(k)) {
+                        p.grille[j][k] = "X";
+                    }
+                }
+            }
+        }
     }
 }

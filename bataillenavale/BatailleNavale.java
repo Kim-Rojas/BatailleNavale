@@ -80,6 +80,12 @@ public class BatailleNavale {
         }
     }
     
+    /**
+     * converti un caractère de type char en int
+     * 
+     * @param c
+     * @return x le caractère converti
+     */
     public static int charToInt(char c){
         int x=1;
         
@@ -104,6 +110,18 @@ public class BatailleNavale {
         return c;
     }
     
+    /**
+     * selectionne un navire en fonction des coordonées rentrées par l'utilisateur
+     * L'utilisateur entre une lettre correspondant à la ligne choisi, et un chiffre pour la colonne, 
+     * L'entrée correspondant à la ligne est converti en chiffre
+     * L'entrée correspondant à la colonne est recalculée pour correspondre à une case de la grille
+     * 
+     * @param s
+     * @param p1 plateau de jeu J1
+     * @param p2 plateau de l'aperçu
+     * @param p3 plateau de l'IA
+     * @return un tableau contenant les coordonées du navire sélectionné
+     */
     public static int[] selectionNavire(Scanner s, Plateau p){
         String tmp = "";
         int[] ans = new int[2];
@@ -117,6 +135,16 @@ public class BatailleNavale {
         try {
             System.out.print("Sélection d'un navire, ligne : ");
             tmp = s.next();
+            //si l'utilisateur rentre "q" la partie se sauvegarde
+            if ("q".equals(tmp)) {
+                String nom = "";
+                System.out.println("Entre le nom du fichier de sauvegarde: ");
+                nom = s.next();
+                cheminJ1 = Plateau.savePartie(p1, nom);
+                cheminApercu = Plateau.saveApercu(p2, nom + "Apercu");
+                cheminIA = Plateau.savePartie(p3, nom + "IA");
+                System.exit(0);                    
+            }
             System.out.print("colonne : ");
             y = s.nextInt();
             tmpy = y;
@@ -147,6 +175,15 @@ public class BatailleNavale {
                 try {
                     System.out.print("Sélection d'un navire, ligne : ");
                     tmp = s.next();
+                    if ("q".equals(tmp)) {
+	                    String nom = "";
+	                    System.out.println("Entre le nom du fichier de sauvegarde: ");
+	                    nom = s.next();
+	                    cheminJ1 = Plateau.savePartie(p1, nom);
+	                    cheminApercu = Plateau.saveApercu(p2, nom + "Apercu");
+	                    cheminIA = Plateau.savePartie(p3, nom + "IA");
+	                    System.exit(0);
+	                }
                     System.out.print("colonne : ");
                     tmpy = s.nextInt();
                     test = 0;
@@ -176,6 +213,15 @@ public class BatailleNavale {
         return  ans;
     }
     
+        /**
+     * choix de l'action que le navire sélectionné va effectuer (tirer ou se déplacer)
+     * 
+     * @param s
+     * @param nav
+     * @param p
+     * 
+     * @return l'option choisie
+     */
     public static String selectionOption(Scanner s, int[] nav, Plateau p){
         int test = 0;
         int test2 = 0;
@@ -226,6 +272,14 @@ public class BatailleNavale {
         return option;
     }
     
+    /**
+     * choix de l'emplacement du plateau adverse où le joueur souhaite tirer
+     * Le joueur doit entrer les coordonnées désirées
+     * 
+     * @param s
+     * 
+     * @return un tableau contenant les coordonnées de la ligne et de la colonne choisis
+     */
     public static int[] selectionTire(Scanner s){
         int test=0;
         int test2=0;
@@ -361,6 +415,11 @@ public class BatailleNavale {
             System.out.println("");
     }
 
+    /**
+     * Affiche le jeu en cours
+     * Le joueur voit son plateau avec le placement de ses navires, ainsi que le plateau
+     * d'aperçu des navires tu=ouchés chez l'adversaire
+     */
     public static void afficherJeu() {
         Plateau p1 = new Plateau();
         Plateau p2 = new Plateau();
@@ -524,11 +583,24 @@ public class BatailleNavale {
         }
     }
     
-    public static void afficherJeuCharge(Plateau p1, Plateau p3) {
+    /**
+    * Methode permettant d'afficher le plateau de jeu à partir des plateaux des 
+    * deux joueurs et d'une arraylist contenant les positions des cases touchés
+    * nécessaire à l'affichage de l'apercu
+    * 
+    * @param p1 le plateau du joueur
+    * @param p2 le plateau de l'IA
+    * @param listeX la liste des positions des X dans l'apercu, soit les coordonnées des cases des navires touchés
+    */
+    public static void afficherJeuCharge(Plateau p1, ArrayList listeX, Plateau p3) {
         Plateau p2 = new Plateau();
         int a;
         String c;
-        
+        Scanner s = new Scanner(System.in);
+        String option = "";
+        int[] choixN = new int[2];
+        int[] choixT = new int[2];
+
         String[][] grilleJoueur = new String[32][32];
         String[][] grilleApercuIA = new String[32][32];
         String[][] grilleIA = new String[32][32];
@@ -536,44 +608,166 @@ public class BatailleNavale {
         grilleJoueur = p1.initGrille();
         //p1.initPlacementNavires();
         p1.placementNaviresCharges();
-        //grilleApercuIA = p2.initGrille();
+        grilleApercuIA = p2.initGrille();
+        Plateau.remplirCasesX(p2, listeX);
 
-       
         p1.afficherPlateau();
-       
-       // p2.lien(grilleIA);
+
+        p2.lien(grilleIA);
         System.out.println("\n");
-        //p2.afficherPlateau();
+        p2.afficherPlateau();
         System.out.println("\n");
-        Scanner s = new Scanner(System.in);
-        while (true) {
+        grilleIA = p3.initGrille();
+        p3.placementNaviresCharges();
+        Plateau.remplirCasesX(p3, listeX);
+        
+        while (p1.verifierPartieFinie() == false && p3.verifierPartieFinie() == false) { //boucle de jeu
+            p2.lien(grilleIA);
+            p1.afficherPlateau();
             System.out.println("");
-            System.out.println("##################################");
-            System.out.println("tour suivant");
-            System.out.println("Entrez \"q\" pour quitter la partie en cours");
-            System.out.println("##################################");
+            p2.afficherPlateau();
             System.out.println("");
-            System.out.print("Entrer une lettre : ");
-            c = s.next();
-            if(c.equals("q")){
-                String nom = "";
-                System.out.println("Entre le nom du fichier de sauvergarde: ");
-                nom = s.next();
-                cheminJ1 = Plateau.savePartie(p1, nom);
-                cheminApercu = Plateau.savePartie(p2, nom+"Apercu");
-                cheminIA = Plateau.savePartie(p3, nom+"IA");
-                System.out.println(cheminJ1);
-                return;
+            p3.afficherPlateau();
+            System.out.println("");
+            p3.checkNavireCoule();
+            choixN = selectionNavire(s, p1, p2, p3);
+            option = selectionOption(s, choixN, p1);
+            if (option.equals("t")) {
+                choixT = selectionTir(s);
+                System.out.println("");
+                switch (p1.grille[choixN[0]][choixN[1]]) {
+                    case "C":
+                        for (Navire n : p1.navires) {
+                            if (n.nom.charAt(0) == 'C') {
+                                n.tirer(choixT[0], choixT[1], grilleIA);
+                                break;
+                            }
+                        }
+                        break;
+                    case "c":
+                        for (Navire n : p1.navires) {
+                            if (n.nom.charAt(0) == 'C' && n.nom.charAt(1) == 'r') {
+                                n.tirer(choixT[0], choixT[1], grilleIA);
+                                break;
+                            }
+                        }
+                        break;
+                    case "d":
+                        for (Navire n : p1.navires) {
+                            if (n.nom.charAt(0) == 'D') {
+                                n.tirer(choixT[0], choixT[1], grilleIA);
+                                break;
+                            }
+                        }
+                        break;
+                    case "s":
+                        for (Navire n : p1.navires) {
+                            if (n.nom.charAt(0) == 'S') {
+                                n.tirer(choixT[0], choixT[1], grilleIA);
+                                break;
+                            }
+                        }
+                        break;
+                }
+            } else { //choix du deplacement
+                switch(p1.grille[choixN[0]][choixN[1]]){
+                    case "C":
+                        for (Navire n : p1.navires){
+                            if(n.nom.charAt(0) == 'C' && n.nom.charAt(1) == 'u'){
+                                selectionDeplacement(s, n, p1);
+                                break;
+                            }
+                        }
+                        break;
+                    case "c":
+                        for (Navire n : p1.navires){
+                            if(n.nom.charAt(0) == 'C' && n.nom.charAt(1) == 'r'){
+                                if (n.sens == 0){
+                                    for (int i = Integer.parseInt(n.tabPos.get(n.taille-1).getKey().toString()); i > Integer.parseInt(n.tabPos.get(n.taille-1).getKey().toString())-n.taille; i--){
+                                        if (choixN[0] == i && choixN[1] == Integer.parseInt(n.tabPos.get(n.taille-1).getValue().toString())){
+                                            selectionDeplacement(s, n, p1);
+                                            break;
+                                        }
+                                    }
+                                }
+                                else{
+                                    for (int j = Integer.parseInt(n.tabPos.get(n.taille-1).getValue().toString()); j > Integer.parseInt(n.tabPos.get(n.taille-1).getValue().toString())-(n.taille*2); j-=2){
+                                        if (choixN[1] == j && choixN[0] == Integer.parseInt(n.tabPos.get(n.taille-1).getKey().toString())){
+                                            selectionDeplacement(s, n, p1);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "d":
+                        for (Navire n : p1.navires){
+                            if(n.nom.charAt(0) == 'D'){
+                                if (n.sens == 0){
+                                    for (int i = Integer.parseInt(n.tabPos.get(n.taille-1).getKey().toString()); i > Integer.parseInt(n.tabPos.get(n.taille-1).getKey().toString())-n.taille; i--){
+                                        if (choixN[0] == i && choixN[1] == Integer.parseInt(n.tabPos.get(n.taille-1).getValue().toString())){
+                                            selectionDeplacement(s, n, p1);
+                                            break;
+                                        }
+                                    }
+                                }
+                                else{
+                                    for (int j = Integer.parseInt(n.tabPos.get(n.taille-1).getValue().toString()); j > Integer.parseInt(n.tabPos.get(n.taille-1).getValue().toString())-(n.taille*2); j-=2){
+                                        if (choixN[1] == j && choixN[0] == Integer.parseInt(n.tabPos.get(n.taille-1).getKey().toString())){
+                                            selectionDeplacement(s, n, p1);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "s":
+                        for (Navire n : p1.navires){
+                            if(n.nom.charAt(0) == 'S'){
+                                if (n.sens == 0){
+                                    for (int i = Integer.parseInt(n.tabPos.get(n.taille-1).getKey().toString()); i > Integer.parseInt(n.tabPos.get(n.taille-1).getKey().toString())-n.taille; i--){
+                                        if (choixN[0] == i && choixN[1] == Integer.parseInt(n.tabPos.get(n.taille-1).getValue().toString())){
+                                            selectionDeplacement(s, n, p1);
+                                            break;
+                                        }
+                                    }
+                                }
+                                else{
+                                    for (int j = Integer.parseInt(n.tabPos.get(n.taille-1).getValue().toString()); j > Integer.parseInt(n.tabPos.get(n.taille-1).getValue().toString())-(n.taille*2); j-=2){
+                                        if (choixN[1] == j && choixN[0] == Integer.parseInt(n.tabPos.get(n.taille-1).getKey().toString())){
+                                            selectionDeplacement(s, n, p1);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                }
             }
-            System.out.print("Entrer un  nombre : ");
-            a = s.nextInt();
-            
+            p2.lien(grilleIA);
+            p1.afficherPlateau();
+            System.out.println("");
+            p2.afficherPlateau();
+            System.out.println("");
+            p3.afficherPlateau();
+            System.out.println("");
+            p3.checkNavireCoule();
+            System.out.println("L'IA est entrain de jouer...");
+            try {
+                Thread.sleep(3000);
+            }  catch (InterruptedException e) {
+                System.out.println(e);
+            }
+            IA(p1, p3);
         }
     }
 
     /**
      *
-     * @author Louis DUTTIERS
+     * Affiche le menu du jeu
      *
      */
     public static void afficherMenu() {
@@ -587,12 +781,10 @@ public class BatailleNavale {
         System.out.print("Veuillez saisir un Nombre : ");
     }
     
-    /**
-     *
-     * @author Louis DUTTIER
-     *
-     */
     
+    /**
+     * Recupere le choix du joueur
+     */
     public static void Menu() {
 
         boolean success = false;
@@ -610,6 +802,10 @@ public class BatailleNavale {
                         System.out.println("Choisir le ficher en question :");
                         System.out.println(" ");
                         System.out.println("-------------------------------------------------------------------------------------");
+                        Plateau pJ1 = Plateau.chargerPartie(nom+".txt");
+                        ArrayList<Pair> pApercu = Plateau.chargerApercu(nom+"Apercu.txt");
+                        Plateau pIA = Plateau.chargerPartie(nom+"IA.txt");
+                        afficherJeuCharge(pJ1, pApercu, pIA);
                         Menu();
                         break;
 
