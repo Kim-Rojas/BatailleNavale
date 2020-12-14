@@ -474,7 +474,7 @@ public class Plateau {
 
         try {
             FileWriter writer = new FileWriter(fichierSauvegarde);
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < p.navires.size(); i++) {
 
                 writer.write(p.navires.get(i).nom + "\n");
                 writer.write(p.navires.get(i).sens + "\n");
