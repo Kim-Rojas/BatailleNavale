@@ -592,7 +592,7 @@ public class BatailleNavale {
         if (p1.verifierPartieFinie() == true)
             System.out.println("VOUS AVEZ GAGNE !");
         if (p3.verifierPartieFinie() == true)
-            System.out.println("L'IA A GANGE !");
+            System.out.println("L'IA A GAGNE !");
     }
 
     /**
