@@ -1,6 +1,5 @@
 package bataillenavale;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javafx.util.Pair;
 
@@ -22,17 +21,17 @@ public class Destroyer extends Navire {
         this.taille = 3;
         this.puissance = 1;
         this.fusee = 1;
-        this.coordonnes = new Pair(0,0);
+        this.coordonnes = new Pair(0, 0);
         this.indice = 0;
     }
 
     /**
-     * Constructeur initialisant un Destroyer avec les positions et son sens 
-     * 
+     * Constructeur initialisant un Destroyer avec les positions et son sens
+     *
      * @param tabPos l'ensemble des coordonnées du navire sur la grille
      * @param sensNav son orientation (horizontal ou vertical)
      */
-    public Destroyer (ArrayList<Pair> tabPos, int sensNav){
+    public Destroyer(ArrayList<Pair> tabPos, int sensNav) {
         this.nom = "Destroyer";
         this.sens = sensNav;
         this.taille = 3;
@@ -43,15 +42,16 @@ public class Destroyer extends Navire {
 
     /**
      * tir du destroyer qui dévoile 1 case dans la grille adverse
-     * 
-     * @param ligne 
+     *
+     * @param ligne
      * @param colonne
-     * @param tab 
-     * 
+     * @param tab
+     *
      */
     @Override
     public void tirer(int ligne, int colonne, String[][] tab) {
-        if (!" ".equals(tab[ligne][colonne]) && !tab[ligne][colonne].equals("s"))
-                tab[ligne][colonne]="X";
+        if (!" ".equals(tab[ligne][colonne]) && !tab[ligne][colonne].equals("s")) {
+            tab[ligne][colonne] = "X";
         }
+    }
 }

@@ -1,28 +1,31 @@
 package bataillenavale;
 
 import com.sun.org.apache.xml.internal.serializer.Serializer;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.util.Pair;
 
-
 /**
-* Classe Plateau, initialise un plateau de jeu
-*
-* @author Louis DUTTIER, Benjamin ROBSON, Kim ROJAS
-* 
-*/
-
+ * Classe Plateau, initialise un plateau de jeu
+ *
+ * @author Louis DUTTIER, Benjamin ROBSON, Kim ROJAS
+ *
+ */
 public class Plateau {
+
     String[][] grille;
     ArrayList<Navire> navires;
 
     /**
-    * Constructeur sans paramètres initialisant un objet de type Plateau
-    */
+     * Constructeur sans paramètres initialisant un objet de type Plateau
+     */
     public Plateau() {
         this.grille = new String[16][32];
         this.navires = new ArrayList();
@@ -30,7 +33,8 @@ public class Plateau {
 
     /**
      * Constructeur avec paramètre initialisant un objet de type Plateau
-     * @param tabNav une arraylist contenant les navires 
+     *
+     * @param tabNav une arraylist contenant les navires
      */
     public Plateau(ArrayList<Navire> tabNav) {
         this.grille = new String[16][32];
@@ -38,12 +42,12 @@ public class Plateau {
     }
 
     /**
-     * Initialise la grille du plateau de jeu
-     * Complète la première ligne et la première colonne avec des coordonnées, 
-     * ainsi que le lignes de séparation des colonnes
-     * 
+     * Initialise la grille du plateau de jeu Complète la première ligne et la
+     * première colonne avec des coordonnées, ainsi que le lignes de séparation
+     * des colonnes
+     *
      * @return la grille du jeu
-     * 
+     *
      */
     public String[][] initGrille() {
         int n = 0;
@@ -91,12 +95,15 @@ public class Plateau {
      */
     public void initNavire() {
         navires.add(new Cuirasse());
-        for (int i=1; i<3; i++)
+        for (int i = 1; i < 3; i++) {
             navires.add(new Croiseur());
-        for (int j=1; j<4;  j++)
+        }
+        for (int j = 1; j < 4; j++) {
             navires.add(new Destroyer());
-        for (int k=1; k<5; k++)
+        }
+        for (int k = 1; k < 5; k++) {
             navires.add(new SousMarin());
+        }
     }
 
     /**
@@ -201,88 +208,93 @@ public class Plateau {
     /**
      * Vérifie si un navire est coulé
      */
-    public void checkNavireCoule(){ // pas encore complètement opérationnelles
+    public void checkNavireCoule() { // pas encore complètement opérationnelles
         int tmpx = 0;
         int tmpy = 0;
         int cpt = 0;
-        for (int i=0; i<navires.size(); i++){
-            tmpx = Integer.parseInt(navires.get(i).tabPos.get(navires.get(i).taille-1).getKey().toString());
-            tmpy = Integer.parseInt(navires.get(i).tabPos.get(navires.get(i).taille-1).getValue().toString());
+        for (int i = 0; i < navires.size(); i++) {
+            tmpx = Integer.parseInt(navires.get(i).tabPos.get(navires.get(i).taille - 1).getKey().toString());
+            tmpy = Integer.parseInt(navires.get(i).tabPos.get(navires.get(i).taille - 1).getValue().toString());
             cpt = 0;
-            if (navires.get(i).sens == 0){
-                switch (navires.get(i).taille){
+            if (navires.get(i).sens == 0) {
+                switch (navires.get(i).taille) {
                     case 1:
-                        if (grille[tmpx][tmpy].equals("X") && navires.get(i).indice != 1){
+                        if (grille[tmpx][tmpy].equals("X") && navires.get(i).indice != 1) {
                             System.out.println("Sous-marin coulé !\n");
                             navires.get(i).indice = 1;
                         }
                         break;
                     case 3:
-                        for (int j = tmpx; j > tmpx-navires.get(i).taille; j--){
-                            if (grille[j][tmpy].equals("X"))
+                        for (int j = tmpx; j > tmpx - navires.get(i).taille; j--) {
+                            if (grille[j][tmpy].equals("X")) {
                                 cpt++;
+                            }
                         }
-                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1){
+                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1) {
                             System.out.println("Destroyer coulé !\n");
                             navires.get(i).indice = 1;
                         }
                         break;
                     case 5:
-                        for (int j = tmpx; j > tmpx-navires.get(i).taille; j--){
-                            if (grille[j][tmpy].equals("X"))
+                        for (int j = tmpx; j > tmpx - navires.get(i).taille; j--) {
+                            if (grille[j][tmpy].equals("X")) {
                                 cpt++;
+                            }
                         }
-                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1){
+                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1) {
                             System.out.println("Croiseur coulé !\n");
                             navires.get(i).indice = 1;
                         }
                         break;
                     case 7:
-                        for (int j = tmpx; j > tmpx-navires.get(i).taille; j--){
-                            if (grille[j][tmpy].equals("X"))
+                        for (int j = tmpx; j > tmpx - navires.get(i).taille; j--) {
+                            if (grille[j][tmpy].equals("X")) {
                                 cpt++;
+                            }
                         }
-                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1){
+                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1) {
                             System.out.println("Cuirasse coulé !\n");
                             navires.get(i).indice = 1;
                         }
                         break;
                 }
-            }
-            else{
-                switch (navires.get(i).taille){
+            } else {
+                switch (navires.get(i).taille) {
                     case 1:
-                        if (grille[tmpx][tmpy].equals("X") && navires.get(i).indice != 1){
+                        if (grille[tmpx][tmpy].equals("X") && navires.get(i).indice != 1) {
                             System.out.println("Sous-marin coulé !\n");
                             navires.get(i).indice = 1;
                         }
                         break;
                     case 3:
-                        for (int j = tmpy; j > tmpy-(navires.get(i).taille*2); j-=2){
-                            if (grille[tmpx][j].equals("X"))
+                        for (int j = tmpy; j > tmpy - (navires.get(i).taille * 2); j -= 2) {
+                            if (grille[tmpx][j].equals("X")) {
                                 cpt++;
+                            }
                         }
-                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1){
+                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1) {
                             System.out.println("Destroyer coulé !\n");
                             navires.get(i).indice = 1;
                         }
                         break;
                     case 5:
-                        for (int j = tmpy; j > tmpy-(navires.get(i).taille*2); j-=2){
-                            if (grille[tmpx][j].equals("X"))
+                        for (int j = tmpy; j > tmpy - (navires.get(i).taille * 2); j -= 2) {
+                            if (grille[tmpx][j].equals("X")) {
                                 cpt++;
+                            }
                         }
-                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1){
+                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1) {
                             System.out.println("Croiseur coulé !\n");
                             navires.get(i).indice = 1;
                         }
                         break;
                     case 7:
-                        for (int j = tmpy; j > tmpy-(navires.get(i).taille*2); j-=2){
-                            if (grille[tmpx][j].equals("X"))
+                        for (int j = tmpy; j > tmpy - (navires.get(i).taille * 2); j -= 2) {
+                            if (grille[tmpx][j].equals("X")) {
                                 cpt++;
+                            }
                         }
-                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1){
+                        if (cpt == navires.get(i).taille && navires.get(i).indice != 1) {
                             System.out.println("Cuirasse coulé !\n");
                             navires.get(i).indice = 1;
                         }
@@ -290,25 +302,26 @@ public class Plateau {
                 }
             }
         }
-        for (int i = 0; i<navires.size(); i++){
-            if (navires.get(i).indice == 1)
+        for (int i = 0; i < navires.size(); i++) {
+            if (navires.get(i).indice == 1) {
                 navires.remove(i);
+            }
         }
     }
-    
+
     /**
-     * permet de replacer les navires dans la grille en fonction de leurs 
+     * permet de replacer les navires dans la grille en fonction de leurs
      * positions se trouvant dans l'attribut tabPos du navire sur lequel on
      * appelle cette méthode
      */
-    public void placementNaviresCharges(){
-        int k=0;
-        for(int i=0; i<this.navires.size(); i++){
+    public void placementNaviresCharges() {
+        int k = 0;
+        for (int i = 0; i < this.navires.size(); i++) {
             //si le navire est place verticalement
-            if(this.navires.get(i).sens == 0){
+            if (this.navires.get(i).sens == 0) {
                 int ligne = Integer.parseInt((String) this.navires.get(i).tabPos.get(0).getKey());
-                int colonne = Integer.parseInt((String)this.navires.get(i).tabPos.get(0).getValue());
-                for (int j = ligne; j < ligne + navires.get(i).taille; j++) {                    
+                int colonne = Integer.parseInt((String) this.navires.get(i).tabPos.get(0).getValue());
+                for (int j = ligne; j < ligne + navires.get(i).taille; j++) {
                     switch (navires.get(i).taille) {
                         case 1:
                             grille[j][colonne] = "s";
@@ -324,14 +337,13 @@ public class Plateau {
                             break;
                     }
                 }
-                
-            } 
-            // si le navire est place horizontalement
+
+            } // si le navire est place horizontalement
             else {
-                int col = Integer.parseInt((String)this.navires.get(i).tabPos.get(0).getValue());
-                int ligne = Integer.parseInt((String)this.navires.get(i).tabPos.get(0).getKey());
-                for (int j = col; j < col + navires.get(i).taille*2; j=j+2) {
-                    
+                int col = Integer.parseInt((String) this.navires.get(i).tabPos.get(0).getValue());
+                int ligne = Integer.parseInt((String) this.navires.get(i).tabPos.get(0).getKey());
+                for (int j = col; j < col + navires.get(i).taille * 2; j = j + 2) {
+
                     switch (navires.get(i).taille) {
                         case 1:
                             grille[ligne][j] = "s";
@@ -351,7 +363,7 @@ public class Plateau {
             k++;
         }
     }
-    
+
     /**
      * Affiche le plateau de jeu
      */
@@ -365,28 +377,31 @@ public class Plateau {
             System.out.println("");
         }
     }
-    
+
     /**
-     * 
-     * @param tab 
+     *
+     * @param tab
      */
     public void lien(String[][] tab) {
         for (int i = 0; i < 16; i++) {
             for (int j = 0; j < 32; j++) {
-                if ("X".equals(tab[i][j]))
+                if ("X".equals(tab[i][j])) {
                     grille[i][j] = "X";
-                if ("o".equals(tab[i][j]))
+                }
+                if ("o".equals(tab[i][j])) {
                     grille[i][j] = "o";
-                if ("n".equals(tab[i][j]))
+                }
+                if ("n".equals(tab[i][j])) {
                     grille[i][j] = "n";
+                }
             }
         }
     }
 
     /**
-     * Vérifie si le placement du navire est possible
-     * Vérifie que le navire ne dépasse pas du plateau
-     * 
+     * Vérifie si le placement du navire est possible Vérifie que le navire ne
+     * dépasse pas du plateau
+     *
      * @param ligne
      * @param colonne
      * @param n
@@ -420,10 +435,11 @@ public class Plateau {
     }
 
     /**
-     * parcours la grille de jeu pour vérifier s'il reste des navires non touchés
-     * 
-     * @return isFinie : true lorque tous les navires d'un plateau sont coulés ou qu'il n'y a plus de sous-marins
-     *                   false sinon
+     * parcours la grille de jeu pour vérifier s'il reste des navires non
+     * touchés
+     *
+     * @return isFinie : true lorque tous les navires d'un plateau sont coulés
+     * ou qu'il n'y a plus de sous-marins false sinon
      */
     public boolean verifierPartieFinie() {
         Boolean isFinie = true;
@@ -431,14 +447,14 @@ public class Plateau {
 
         for (int i = 1; i < 16; i++) {
             for (int j = 1; j < 32; j++) {
-                if (grille[i][j] == "d" || grille[i][j] == "c" || grille[i][j] == "C" || grille[i][j] == "s"){
+                if (grille[i][j] == "d" || grille[i][j] == "c" || grille[i][j] == "C" || grille[i][j] == "s") {
                     isFinie = false;
                     cptS++;
-                }      
+                }
             }
         }
 
-        if (isFinie == true){
+        if (isFinie == true) {
             System.out.println("La partie est terminée");
         }
 
@@ -447,14 +463,14 @@ public class Plateau {
 
     /**
      * sauvegarde une partie en cours
-     * 
+     *
      * @param p le plateau à sauvegarder
      * @param nomFichier le nom du fichier de destination
      * @return le chemin du fichier texte correspondant à la partie sauvegardée
      */
     public static String savePartie(Plateau p, String nomFichier) {
-        
-        File fichierSauvegarde = new File(nomFichier+".txt");
+
+        File fichierSauvegarde = new File(nomFichier + ".txt");
 
         try {
             FileWriter writer = new FileWriter(fichierSauvegarde);
@@ -481,13 +497,14 @@ public class Plateau {
         return fichierSauvegarde.getAbsolutePath();
 
     }
-   
-   /**
+
+    /**
      * sauvegarde le plateau d'aperçu des navires touchés chez l'adversaire
-     * 
+     *
      * @param p le plateau d'aperçu
      * @param nomFichier le nom du fichier de destination
-     * @return le chemin du fichier texte contenant les coordonnées des points touchés des navires
+     * @return le chemin du fichier texte contenant les coordonnées des points
+     * touchés des navires
      */
     public static String saveApercu(Plateau p, String nomFichier) {
         File fichierSauvegarde = new File(nomFichier + ".txt");
@@ -513,13 +530,14 @@ public class Plateau {
         return fichierSauvegarde.getAbsolutePath();
     }
 
-
     /**
-     * charge le plateau de jeu à partir des informations stockées dans le fichier texte
-     * 
+     * charge le plateau de jeu à partir des informations stockées dans le
+     * fichier texte
+     *
      * @param chemin du fichier texte contenant les informations sur le plateau
-     * 
-     * @return un plateau initialisé avec une liste de navires récupérer dans le fichier
+     *
+     * @return un plateau initialisé avec une liste de navires récupérer dans le
+     * fichier
      */
     public static Plateau chargerPartie(String chemin) {
         int i = 1;
@@ -540,18 +558,14 @@ public class Plateau {
             while ((ligne = br.readLine()) != null) {
                 if (i % 5 == 1) {
                     tab[0] = ligne;
-                }
-                else if (i % 5 == 2) {
+                } else if (i % 5 == 2) {
                     tab[1] = ligne;
-                }
-                else if (i % 5 == 3) {
+                } else if (i % 5 == 3) {
                     tab[2] = ligne;
-                }
-                else if (i % 5 == 4) {
+                } else if (i % 5 == 4) {
                     tab[3] = ligne;
 
-                }
-                else if (i % 5 == 0) {
+                } else if (i % 5 == 0) {
                     //recuperation des positions
                     tabPos = new ArrayList<Pair>();
                     String[] positions = ligne.split(" ");
@@ -571,7 +585,7 @@ public class Plateau {
                     }
                     //ajout du navire dans l'arraylist
                     listeNavires.add(navire);
-                    
+
                 }
                 //tabPos.clear();
                 i++;
@@ -590,12 +604,11 @@ public class Plateau {
         return plateau;
     }
 
-
     /**
      * charge le plateau de l'aperçu
-     * 
+     *
      * @param chemin du fichier texte contenant les positions des X sur l'aperçu
-     * 
+     *
      * @return une arraylist les coordonnées de chaque X
      */
     public static ArrayList chargerApercu(String chemin) {
@@ -643,13 +656,13 @@ public class Plateau {
     }
 
     /**
-     * rempli le plateau de l'aperçu en mettant les X dans les bonnes cases 
-     * 
+     * rempli le plateau de l'aperçu en mettant les X dans les bonnes cases
+     *
      * @param p le plateau de l'aperçu
-     * @param listeX liste des coordonnées 
+     * @param listeX liste des coordonnées
      */
     public static void remplirCasesX(Plateau p, ArrayList<Pair> listeX) {
-        
+
         for (int i = 0; i < listeX.size(); i++) {
             for (int j = 1; j < 16; j++) {
                 for (int k = 2; k < 30; k = k + 2) {

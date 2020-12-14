@@ -1,32 +1,30 @@
 package bataillenavale;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javafx.util.Pair;
 
 /**
-*
-* @author Benjamin ROBSON, Kim ROJAS
-* 
-*/
-
+ *
+ * @author Benjamin ROBSON, Kim ROJAS
+ *
+ */
 public class Cuirasse extends Navire {
 
     /**
      * Constructeur sans paramètres
      */
-	public Cuirasse(){
+    public Cuirasse() {
         this.nom = "Cuirasse";
         this.sens = 0;
         this.taille = 7;
         this.puissance = 9;
-        this.coordonnes = new Pair(0,0);
+        this.coordonnes = new Pair(0, 0);
         this.indice = 0;
     }
-    
+
     /**
-     * Constructeur initialisant un Cuirasse avec les positions et son sens 
-     * 
+     * Constructeur initialisant un Cuirasse avec les positions et son sens
+     *
      * @param tabPos l'ensemble des coordonnées du navire sur la grille
      * @param sensNav son orientation (horizontal ou vertical)
      */
@@ -40,18 +38,18 @@ public class Cuirasse extends Navire {
 
     /**
      * tir du cuirasse qui dévoile un carré de 9 cases dans la grille adverse
-     * 
-     * @param ligne 
+     *
+     * @param ligne
      * @param colonne
-     * @param tab 
-     * 
+     * @param tab
+     *
      * @author Benjamin ROBSON
      */
     @Override
     public void tirer(int ligne, int colonne, String[][] tab) {
         int cptl = 3;
         int cptc = 6;
-        switch(ligne){
+        switch (ligne) {
             case 14:
                 cptl -= 1;
                 break;
@@ -59,7 +57,7 @@ public class Cuirasse extends Navire {
                 cptl -= 2;
                 break;
         }
-        switch(colonne){
+        switch (colonne) {
             case 28:
                 cptc -= 2;
                 break;
@@ -67,10 +65,11 @@ public class Cuirasse extends Navire {
                 cptc -= 4;
                 break;
         }
-        for (int i = ligne; i<ligne+cptl; i++){
-            for (int j = colonne; j<colonne+cptc; j+=2){
-                if (!tab[i][j].equals(" ") && !tab[i][j].equals("s"))
+        for (int i = ligne; i < ligne + cptl; i++) {
+            for (int j = colonne; j < colonne + cptc; j += 2) {
+                if (!tab[i][j].equals(" ") && !tab[i][j].equals("s")) {
                     tab[i][j] = "X";
+                }
             }
         }
     }

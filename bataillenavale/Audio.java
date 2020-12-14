@@ -15,7 +15,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 /**
  *
  * @author Louis DUTTIER
- * @source https://www.codejava.net/coding/how-to-play-back-audio-in-java-with-examples
+ * @source
+ * https://www.codejava.net/coding/how-to-play-back-audio-in-java-with-examples
  */
 public class Audio implements LineListener {
 
