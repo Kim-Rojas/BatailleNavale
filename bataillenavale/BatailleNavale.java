@@ -1,12 +1,37 @@
 package bataillenavale;
 
+import bataillenavale.Navire;
+import bataillenavale.Plateau;
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.io.IOException;
 import java.util.InputMismatchException;
-import java.util.Random;
 import java.util.Scanner;
 
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Random;
+
 import javafx.application.Application;
+import static javafx.scene.paint.Color.color;
 import javafx.stage.Stage;
+import javafx.util.Pair;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import sun.audio.AudioStream;
 
 /**
  *
@@ -15,17 +40,11 @@ import javafx.stage.Stage;
  */
 public class BatailleNavale {
 
-    /**
-     *
-     * @author Louis DUTTIER, Benjamin ROBSON
-     *
-     */
-    
     final static String cheminFinal = "";
     private static String cheminJ1;
     private static String cheminIA;
     private static String cheminApercu;
-    
+
     public static void IA(Plateau p1, Plateau p3){
         Random r = new Random();
         int x = 0;
@@ -122,7 +141,8 @@ public class BatailleNavale {
      * @param p3 plateau de l'IA
      * @return un tableau contenant les coordonées du navire sélectionné
      */
-    public static int[] selectionNavire(Scanner s, Plateau p){
+    public static int[] selectionNavire(Scanner s, Plateau p1, Plateau p2, Plateau p3){
+     
         String tmp = "";
         int[] ans = new int[2];
         int x = 0;
@@ -149,16 +169,16 @@ public class BatailleNavale {
             y = s.nextInt();
             tmpy = y;
         }catch (InputMismatchException ime) {
-            System.out.println("Erreur dans votre saisi !");
+            System.out.println("Erreur dans votre saisie !");
             test = 1;
         }
         if (test == 0){
                 if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'o' || tmp.length() > 1 || y < 0 || y > 14)
-                    System.out.println("Erreur dans votre saisi !");
+                    System.out.println("Erreur dans votre saisie !");
                 else{
                     x = charToInt(tmp.charAt(0));
                     y = (y * 2) + 2;
-                    if (!"C".equals(p.grille[x][y]) && !"c".equals(p.grille[x][y]) && !"d".equals(p.grille[x][y]) && !"s".equals(p.grille[x][y])){
+                    if (!"C".equals(p1.grille[x][y]) && !"c".equals(p1.grille[x][y]) && !"d".equals(p1.grille[x][y]) && !"s".equals(p1.grille[x][y])){
                         System.out.println("Navire inexistant !");
                         test2=1;
                     }
@@ -188,17 +208,17 @@ public class BatailleNavale {
                     tmpy = s.nextInt();
                     test = 0;
                 }catch (InputMismatchException ime) {
-                    System.out.println("Erreur dans votre saisi !");
+                    System.out.println("Erreur dans votre saisie !");
                     test = 1;
                 }
                 if (test == 0){
                     if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'o' || tmp.length() > 1 || tmpy < 0 || tmpy > 14)
-                        System.out.println("Erreur dans votre saisi !");
+                        System.out.println("Erreur dans votre saisie !");
                     else{
                         x = charToInt(tmp.charAt(0));
                         tmpy2 = tmpy;
                         tmpy = (tmpy * 2) + 2;
-                        if (!"C".equals(p.grille[x][tmpy]) && !"c".equals(p.grille[x][tmpy]) && !"d".equals(p.grille[x][tmpy]) && !"s".equals(p.grille[x][tmpy])){
+                        if (!"C".equals(p1.grille[x][tmpy]) && !"c".equals(p1.grille[x][tmpy]) && !"d".equals(p1.grille[x][tmpy]) && !"s".equals(p1.grille[x][tmpy])){
                             System.out.println("Navire inexistant !");
                             test2=1;
                         }
@@ -246,11 +266,11 @@ public class BatailleNavale {
             System.out.print("Navire : "+name+". Voulez-vous tirer ou déplacer le navire (t/d) : ");
             option = s.next();
         }catch (InputMismatchException ime){
-            System.out.println("Erreur dans votre saisi !");
+            System.out.println("Erreur dans votre saisie !");
             test = 1;
         }
         if (!option.equals("t") && !option.equals("d")){
-            System.out.println("Erreur dans votre saisi !");
+            System.out.println("Erreur dans votre saisie !");
             test2=1;
         }
         while (test==1 || test2==1){
@@ -259,11 +279,11 @@ public class BatailleNavale {
                 option = s.next();
                 test = 0;
             }catch (InputMismatchException ime){
-                System.out.println("Erreur dans votre saisi !");
+                System.out.println("Erreur dans votre saisie !");
                 test = 1;
             }
             if (!option.equals("t") && !option.equals("d") ){
-                System.out.println("Erreur dans votre saisi !");
+                System.out.println("Erreur dans votre saisie !");
                 test2=1;
             }
             else
@@ -280,7 +300,7 @@ public class BatailleNavale {
      * 
      * @return un tableau contenant les coordonnées de la ligne et de la colonne choisis
      */
-    public static int[] selectionTire(Scanner s){
+    public static int[] selectionTir(Scanner s){
         int test=0;
         int test2=0;
         String tmp = "";
@@ -294,11 +314,11 @@ public class BatailleNavale {
             System.out.print("colonne : ");
             c = s.nextInt();
         }catch (InputMismatchException ime) {
-            System.out.println("Erreur dans votre saisi !");
+            System.out.println("Erreur dans votre saisie !");
             test=1;
         }
         if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'o' || tmp.length() > 1 || c < 0 || c > 14){
-            System.out.println("Erreur dans votre saisi !");
+            System.out.println("Erreur dans votre saisie !");
             test2=1;
         }
         while (test==1 || test2==1){
@@ -309,11 +329,11 @@ public class BatailleNavale {
                 c = s.nextInt();
                 test=0;
             }catch (InputMismatchException ime) {
-                System.out.println("Erreur dans votre saisi !");
+                System.out.println("Erreur dans votre saisie !");
                 test=1;
             }
             if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'o' || tmp.length() > 1 || c < 0 || c > 14){
-                System.out.println("Erreur dans votre saisi !");
+                System.out.println("Erreur dans votre saisie !");
                 test2=1;
             }
             else
@@ -338,11 +358,11 @@ public class BatailleNavale {
                     System.out.print("Navire vertical, déplacement souhaité (N/S) : ");
                     rep = s.next();
                 }catch (InputMismatchException ime) {
-                    System.out.println("Erreur dans votre saisi !");
+                    System.out.println("Erreur dans votre saisie !");
                     test=1;
                 }
                 if (!"N".equals(rep) && !"S".equals(rep)){
-                    System.out.println("Erreur dans votre saisi !");
+                    System.out.println("Erreur dans votre saisie !");
                     test2=1;
                 }
                 if ((d=n.deplacer(rep.charAt(0), p1.grille, 1)) != 0){
@@ -356,11 +376,11 @@ public class BatailleNavale {
                         rep = s.next();
                         test=0;
                     }catch (InputMismatchException ime) {
-                        System.out.println("Erreur dans votre saisi !");
+                        System.out.println("Erreur dans votre saisie !");
                         test=1;
                     }
                     if (!"N".equals(rep) && !"S".equals(rep)){
-                        System.out.println("Erreur dans votre saisi !");
+                        System.out.println("Erreur dans votre saisie !");
                         test2=1;
                     }
                     else
@@ -378,11 +398,11 @@ public class BatailleNavale {
                     System.out.print("Navire horizontal, déplacement souhaité (W/E) : ");
                     rep = s.next();
                 }catch (InputMismatchException ime) {
-                    System.out.println("Erreur dans votre saisi !");
+                    System.out.println("Erreur dans votre saisie !");
                     test=1;
                 }
                 if (!"W".equals(rep) && !"E".equals(rep)){
-                    System.out.println("Erreur dans votre saisi !");
+                    System.out.println("Erreur dans votre saisie !");
                     test2=1;
                 }
                 if ((d=n.deplacer(rep.charAt(0), p1.grille, 1)) != 0)
@@ -395,11 +415,11 @@ public class BatailleNavale {
                         rep = s.next();
                         test=0;
                     }catch (InputMismatchException ime) {
-                        System.out.println("Erreur dans votre saisi !");
+                        System.out.println("Erreur dans votre saisie !");
                         test=1;
                     }
                     if (!"W".equals(rep) && !"E".equals(rep)){
-                        System.out.println("Erreur dans votre saisi !");
+                        System.out.println("Erreur dans votre saisie !");
                         test2=1;
                     }
                     else
@@ -415,7 +435,7 @@ public class BatailleNavale {
             System.out.println("");
     }
 
-    /**
+     /**
      * Affiche le jeu en cours
      * Le joueur voit son plateau avec le placement de ses navires, ainsi que le plateau
      * d'aperçu des navires tu=ouchés chez l'adversaire
@@ -447,10 +467,10 @@ public class BatailleNavale {
             p3.afficherPlateau();
             System.out.println("");
             p1.checkNavireCoule();
-            choixN = selectionNavire(s, p1);
+            choixN = selectionNavire(s, p1, p2, p3);
             option = selectionOption(s, choixN, p1);
             if (option.equals("t")){ // choix du tir
-                choixT = selectionTire(s);
+                choixT = selectionTir(s);
                 System.out.println("");
                 switch(p1.grille[choixN[0]][choixN[1]]){
                     case "C":
@@ -766,7 +786,7 @@ public class BatailleNavale {
     }
 
     /**
-     *
+     * 
      * Affiche le menu du jeu
      *
      */
@@ -778,37 +798,46 @@ public class BatailleNavale {
         System.out.println("3 - Règles du jeu");
         System.out.println("4 - Quitter Mobile Naval");
         System.out.println(" ");
-        System.out.print("Veuillez saisir un Nombre : ");
+        System.out.println("Veuillez saisir un Nombre : ");
     }
-    
-    
+
     /**
+     *
      * Recupere le choix du joueur
+     *
      */
     public static void Menu() {
-
         boolean success = false;
+        String chemin = "";
+        Plateau essai = new Plateau();
         Scanner choix = new Scanner(System.in);
+        Scanner in = new Scanner(System.in);
 
+        String audioFilePath = "C:\\Users\\Admin\\Documents\\Cours\\ECE\\Semestre 1\\JAVA\\Son1.wav";
+        Audio player = new Audio();
+        
         while (!success) {
             try {
-                afficherMenu(); int incertionChoix = choix.nextInt();
+                player.play(audioFilePath);
+                afficherMenu();
+                int incertionChoix = choix.nextInt();
                 switch (incertionChoix) {
                     case 1:
                         System.out.println("");
                         afficherJeu();
                         break;
                     case 2:
-                        System.out.println("Choisir le ficher en question :");
+                        System.out.println("Choisir le fichier en question :");
                         System.out.println(" ");
-                        System.out.println("-------------------------------------------------------------------------------------");
+                        String nom = in.next();
                         Plateau pJ1 = Plateau.chargerPartie(nom+".txt");
                         ArrayList<Pair> pApercu = Plateau.chargerApercu(nom+"Apercu.txt");
                         Plateau pIA = Plateau.chargerPartie(nom+"IA.txt");
                         afficherJeuCharge(pJ1, pApercu, pIA);
+                        System.out.println(" ");
+                        System.out.println("-------------------------------------------------------------------------------------");
                         Menu();
                         break;
-
 
                     case 3:
                         System.out.println("###############################################");
@@ -824,9 +853,11 @@ public class BatailleNavale {
                         System.out.println("Voici les spécificitées des différents bateaux :");
                         System.out.println("- Cuirassé ");
                         System.out.println("    Taille = 7 cases ; Puissance de tir : 9 cases");
+                        System.out.println("    (Carré de 3x3 commençant en haut à gauche de celui-ci)");
                         System.out.println("  ");
                         System.out.println("- Croiseur ");
                         System.out.println("    Taille = 5 cases ; Puissance de tir : 4 cases");
+                        System.out.println("    (Carré de 2x2 commençant en haut à gauche de celui-ci)");
                         System.out.println("  ");
                         System.out.println("- Destroyer ");
                         System.out.println("    Taille = 3 cases ; Puissance de tir : 1 case");
@@ -834,19 +865,26 @@ public class BatailleNavale {
                         System.out.println("    La zone démarre à partir du  coin  haut  et  gauche.");
                         System.out.println("    Les navires adverses de ce carré ne seront visibles que lors du tour du jeu, soit pendant quelques secondes");
                         System.out.println("  ");
-                        System.out.println("- Cuirassé ");
+                        System.out.println("- Sous-Marin ");
                         System.out.println("    Taille = 1 case ; Puissance de tir : 1 case");
                         System.out.println("  ");
-                        System.out.println (" Possibilité de déplacer un de ses navires, mais seulement d'UNE seule case (qu'à l'horizontale ou à la verticale");
-                        System.out.println(" Si vous êtes touché ou vous avez un obstacle devant vous, impossible de se déplacer");
+                        System.out.println("Possibilité de déplacer un de ses navires, mais seulement d'UNE seule case (qu'à l'horizontale ou à la verticale");
+                        System.out.println("Le déplacement s'effectuera avec les fléches directives.");
+                        System.out.println("Si vous êtes touché ou vous avez un obstacle devant vous, impossible de se déplacer");
                         System.out.println(" ");
                         System.out.println("Vous savez tout ! Maintenant, à vous de jouer !");
                         System.out.println("  ");
+                        System.out.println(" Commandes :");
+                        System.out.println("- taper le numéro de la ligne");
+                        System.out.println("- taper le numéro de la colonne");
+                        System.out.println("- choisir entre 't' pour tirer ou 'd' pour déplacer");
+                        System.out.println("- taper la ligne et la colonne de l'endroit où tirer");
+                        System.out.println(" ");
                         System.out.println("-------------------------------------------------------------------------------------");
                         Menu();
                         break;
                     case 4:
-                        System.out.println("Au revoir :)");
+                        System.out.println("À bientôt sur le jeu !");
                         System.exit(0);
                         break;
                     default:
@@ -857,7 +895,7 @@ public class BatailleNavale {
                 }
                 Menu();
             } catch (InputMismatchException ime) {
-                System.out.println("Erreur dans votre saisi");
+                System.out.println("Erreur dans votre saisie");
                 Menu();
             }
             success = true;

@@ -8,6 +8,7 @@ import javafx.util.Pair;
 * Classe abstraite Navire
 * Contient les attributs nécessaires pour décrire un navire et les méthodes à implémenter
 * 
+* @author Benjamin ROBSON, Kim ROJAS
 */
 
 public abstract class Navire {

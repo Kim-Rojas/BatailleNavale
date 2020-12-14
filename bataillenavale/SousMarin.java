@@ -8,7 +8,7 @@ import javafx.util.Pair;
  * Classe SousMarin qui étend la classe abstraite Navire. 
  * Elle crée des objets de type SousMarin, et implémente leur fonction de tir et de déplacement
  * 
- * @author Benjamin ROBSON, Kim ROJAS *
+ * @author Benjamin ROBSON, Kim ROJAS
  */
 public class SousMarin extends Navire {
 
