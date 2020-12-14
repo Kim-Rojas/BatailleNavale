@@ -22,6 +22,13 @@ public class BatailleNavale {
     private static String cheminIA;
     private static String cheminApercu;
 
+    /**
+     * Permet à l'IA de jouer
+     * L'utilisateur est en attente du choix de l'IA 
+     * 
+     * @param p1 plateau du joueur
+     * @param p3 plateau de l'IA
+     */
     public static void IA(Plateau p1, Plateau p3) {
         Random r = new Random();
         int x = 0;
@@ -95,6 +102,12 @@ public class BatailleNavale {
         return x;
     }
 
+    /**
+     * converti un caractère de type int en char
+     * 
+     * @param x
+     * @return c le caractère converti
+     */
     public static char intToChar(int x) {
         int test = 1;
         char c = 'a';
@@ -328,6 +341,12 @@ public class BatailleNavale {
         return ans;
     }
 
+    /**
+     * Permet à l'utilisateur de choisir dans quelle direction il souhaite déplacer son navire
+     * @param s
+     * @param n
+     * @param p1 
+     */
     public static void selectionDeplacement(Scanner s, Navire n, Plateau p1) {
         String rep = "";
         int test = 0;
