@@ -659,9 +659,7 @@ public class BatailleNavale {
             System.out.println("");
             p2.afficherPlateau();
             System.out.println("");
-            p3.afficherPlateau();
-            System.out.println("");
-            p3.checkNavireCoule();
+            p1.checkNavireCoule();
             choixN = selectionNavire(s, p1, p2, p3);
             option = selectionOption(s, choixN, p1);
             if (option.equals("t")) {
@@ -781,8 +779,6 @@ public class BatailleNavale {
             System.out.println("");
             p2.afficherPlateau();
             System.out.println("");
-            p3.afficherPlateau();
-            System.out.println("");
             p3.checkNavireCoule();
             System.out.println("L'IA est entrain de jouer...");
             try {
@@ -822,7 +818,7 @@ public class BatailleNavale {
         Scanner choix = new Scanner(System.in);
         Scanner in = new Scanner(System.in);
 
-        String audioFilePath = "C:\\Users\\Benji\\Desktop\\ECE\\java\\bataillenavale\\Son1.wav";
+        String audioFilePath = "Son1.wav";
         Audio player = new Audio();
 
         while (!success) {
