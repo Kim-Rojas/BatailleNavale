@@ -448,8 +448,11 @@ public class Plateau {
         for (int i = 1; i < 16; i++) {
             for (int j = 1; j < 32; j++) {
                 if (grille[i][j] == "d" || grille[i][j] == "c" || grille[i][j] == "C" || grille[i][j] == "s") {
+                    if(grille[i][j] == "s"){
+                        cptS++;
+                    }
                     isFinie = false;
-                    cptS++;
+                    
                 }
             }
         }
