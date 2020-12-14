@@ -454,7 +454,7 @@ public class Plateau {
             }
         }
 
-        if (isFinie == true) {
+        if (isFinie == true || cptS == 0) {
             System.out.println("La partie est terminée");
         }
 
