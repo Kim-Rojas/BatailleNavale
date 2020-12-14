@@ -2,6 +2,7 @@ package bataillenavale;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
+import java.util.Random;
 import java.util.Scanner;
 
 import javafx.application.Application;
@@ -26,7 +27,57 @@ public class BatailleNavale {
     private static String cheminApercu;
     
     public static void IA(Plateau p1, Plateau p3){
+        Random r = new Random();
+        int x = 0;
+        int y = 0;
+        char[] d = new char[4];
+        d[0]='N';
+        d[1]='S';
+        d[2]='E';
+        d[3]='W';
+        int NS = r.nextInt((1-0)+1)+0;
+        int WE = r.nextInt((3-2)+1)+2;
+        int choixN = r.nextInt(p3.navires.size());
+        int choixO = r.nextInt(2);
         
+        System.out.println("Navire choisi : "+p3.navires.get(choixN).nom);
+        try {
+            Thread.sleep(3000);
+        }  catch (InterruptedException e) {
+            System.out.println(e);
+        }
+        if (choixO == 1){ // tir IA
+            System.out.println("Il s'apprête à tirer..");
+            try {
+                Thread.sleep(3000);
+            }  catch (InterruptedException e) {
+                System.out.println(e);
+            }
+            x = r.nextInt((15 - 1) + 1) + 1;
+            y = r.nextInt(31);
+            while (y == 0 || y % 2 != 0)
+                y = r.nextInt(31);
+            System.out.println("Coordonnées de tir ("+intToChar(x)+"/"+((y/2)-1)+")");
+            System.out.println("");
+            try {
+                Thread.sleep(3000);
+            }  catch (InterruptedException e) {
+                System.out.println(e);
+            }
+            p3.navires.get(choixN).tirer(x, y, p1.grille);
+        }
+        else{ // déplacement IA
+            System.out.println("Il s'apprête à déplacer son navire..\n");
+            try {
+                Thread.sleep(3000);
+            }  catch (InterruptedException e) {
+                System.out.println(e);
+            }
+            if (p3.navires.get(choixN).sens == 0)
+                p3.navires.get(choixN).deplacer(d[NS], p3.grille, 2);
+            else
+                p3.navires.get(choixN).deplacer(d[WE], p3.grille, 2);
+        }
     }
     
     public static int charToInt(char c){
@@ -40,51 +91,94 @@ public class BatailleNavale {
         return x;
     }
     
-    public static int[] selectionNavire(Scanner s, Plateau p1, Plateau p2, Plateau p3){
-        boolean success = false;
+    public static char intToChar(int x){
+        int test=1;
+        char c = 'a';
+        
+        for (char tmp = 'a'; tmp <= 'o'; tmp++){
+            c=tmp;
+            if (test == x)
+                break;
+            test++;
+        }
+        return c;
+    }
+    
+    public static int[] selectionNavire(Scanner s, Plateau p){
         String tmp = "";
         int[] ans = new int[2];
         int x = 0;
         int y = 0;
+        int tmpy = 0;
+        int tmpy2 = 0;
+        int test = 0;
+        int test2 = 0;
         
-        while (success == false){
+        try {
+            System.out.print("Sélection d'un navire, ligne : ");
+            tmp = s.next();
+            System.out.print("colonne : ");
+            y = s.nextInt();
+            tmpy = y;
+        }catch (InputMismatchException ime) {
+            System.out.println("Erreur dans votre saisi !");
+            test = 1;
+        }
+        if (test == 0){
+                if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'o' || tmp.length() > 1 || y < 0 || y > 14)
+                    System.out.println("Erreur dans votre saisi !");
+                else{
+                    x = charToInt(tmp.charAt(0));
+                    y = (y * 2) + 2;
+                    if (!"C".equals(p.grille[x][y]) && !"c".equals(p.grille[x][y]) && !"d".equals(p.grille[x][y]) && !"s".equals(p.grille[x][y])){
+                        System.out.println("Navire inexistant !");
+                        test2=1;
+                    }
+                    else
+                        test2=0;
+                }
+        }
+        if (test == 0 && test2==0 && tmp.charAt(0) >= 'a' && tmp.charAt(0) <= 'o' && tmp.length() == 1 && tmpy >= 0 && tmpy <= 14){
+            ans[0] = x;
+            ans[1] = y;
+        }
+        else{
+            while (test == 1 || test2 == 1 || (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'o' || tmp.length() > 1 || tmpy2 < 0 || tmpy2 > 14)){
                 try {
                     System.out.print("Sélection d'un navire, ligne : ");
                     tmp = s.next();
-                    if ("q".equals(tmp)) {
-                        String nom = "";
-                        System.out.println("Entre le nom du fichier de sauvegarde: ");
-                        nom = s.next();
-                        cheminJ1 = Plateau.savePartie(p1, nom);
-                        cheminApercu = Plateau.saveApercu(p2, nom + "Apercu");
-                        cheminIA = Plateau.savePartie(p3, nom + "IA");
-                        System.exit(0);
-                    }
-                    System.out.print(" colonne : ");
-                    y = s.nextInt();
-                    if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'o' || tmp.length() > 1 || y < 0 || y > 14){
-                        System.out.println("Erreur dans votre saisi");
-                        selectionNavire(s,p1,p2,p3);
-                    }
-                    x = charToInt(tmp.charAt(0));
-                    y = (y * 2) + 2;
-                    if (!"C".equals(p1.grille[x][y]) && !"c".equals(p1.grille[x][y]) && !"d".equals(p1.grille[x][y]) && !"s".equals(p1.grille[x][y])){
-                        System.out.println("Sélectionnez un navire !");
-                        selectionNavire(s,p1,p2,p3);
-                    }
+                    System.out.print("colonne : ");
+                    tmpy = s.nextInt();
+                    test = 0;
                 }catch (InputMismatchException ime) {
-                    System.out.println("Erreur dans votre saisi");
-                    selectionNavire(s,p1,p2,p3);
+                    System.out.println("Erreur dans votre saisi !");
+                    test = 1;
                 }
-                success = true;
+                if (test == 0){
+                    if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'o' || tmp.length() > 1 || tmpy < 0 || tmpy > 14)
+                        System.out.println("Erreur dans votre saisi !");
+                    else{
+                        x = charToInt(tmp.charAt(0));
+                        tmpy2 = tmpy;
+                        tmpy = (tmpy * 2) + 2;
+                        if (!"C".equals(p.grille[x][tmpy]) && !"c".equals(p.grille[x][tmpy]) && !"d".equals(p.grille[x][tmpy]) && !"s".equals(p.grille[x][tmpy])){
+                            System.out.println("Navire inexistant !");
+                            test2=1;
+                        }
+                        else
+                            test2=0;
+                    }
+                }
+            }
+            ans[0] = x;
+            ans[1] = tmpy;
         }
-        ans[0] = x;
-        ans[1] = y;
         return  ans;
     }
     
     public static String selectionOption(Scanner s, int[] nav, Plateau p){
-        boolean success = false;
+        int test = 0;
+        int test2 = 0;
         String option = "";
         String name = "";
         
@@ -102,51 +196,169 @@ public class BatailleNavale {
                 name = "Sous-marin";
                 break;
         }
-        while (success == false){
-                try {
-                    System.out.print("Navire : "+name+". Voulez-vous tirer ou déplacer le navire (t/d) : ");
-                    option = s.next();
-                    if (!option.equals("t") && !option.equals("d")){
-                        System.out.println("Erreur dans votre saisi");
-                        selectionOption(s, nav, p);
-                    }
-                }catch (InputMismatchException ime){
-                    System.out.println("Erreur dans votre saisi");
-                    selectionOption(s, nav, p);
-                }
-                success = true;
+        try {
+            System.out.print("Navire : "+name+". Voulez-vous tirer ou déplacer le navire (t/d) : ");
+            option = s.next();
+        }catch (InputMismatchException ime){
+            System.out.println("Erreur dans votre saisi !");
+            test = 1;
+        }
+        if (!option.equals("t") && !option.equals("d")){
+            System.out.println("Erreur dans votre saisi !");
+            test2=1;
+        }
+        while (test==1 || test2==1){
+            try {
+                System.out.print("Navire : "+name+". Voulez-vous tirer ou déplacer le navire (t/d) : ");
+                option = s.next();
+                test = 0;
+            }catch (InputMismatchException ime){
+                System.out.println("Erreur dans votre saisi !");
+                test = 1;
+            }
+            if (!option.equals("t") && !option.equals("d") ){
+                System.out.println("Erreur dans votre saisi !");
+                test2=1;
+            }
+            else
+                test2=0;
         }
         return option;
     }
     
-    public static int[] selectionTir(Scanner s){
-        boolean success = false;
+    public static int[] selectionTire(Scanner s){
+        int test=0;
+        int test2=0;
         String tmp = "";
         int[] ans = new int[2];
         int l = 0;
         int c = 0;
         
-        while (success == false){
-                try {
-                    System.out.print("Coordonnées de tir, ligne : ");
-                    tmp = s.next();
-                    System.out.print(" colonne : ");
-                    c = s.nextInt();
-                    if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'o' || tmp.length() > 1 || c < 0 || c > 14){
-                        System.out.println("Erreur dans votre saisi");
-                        selectionTir(s);
-                    }
-                    l = charToInt(tmp.charAt(0));
-                    c = (c * 2) + 2;
-                }catch (InputMismatchException ime) {
-                    System.out.println("Erreur dans votre saisi");
-                    selectionTir(s);
-                }
-                success = true;
+        try {
+            System.out.print("Coordonnées de tir, ligne : ");
+            tmp = s.next();
+            System.out.print("colonne : ");
+            c = s.nextInt();
+        }catch (InputMismatchException ime) {
+            System.out.println("Erreur dans votre saisi !");
+            test=1;
         }
+        if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'o' || tmp.length() > 1 || c < 0 || c > 14){
+            System.out.println("Erreur dans votre saisi !");
+            test2=1;
+        }
+        while (test==1 || test2==1){
+            try {
+                System.out.print("Coordonnées de tir, ligne : ");
+                tmp = s.next();
+                System.out.print("colonne : ");
+                c = s.nextInt();
+                test=0;
+            }catch (InputMismatchException ime) {
+                System.out.println("Erreur dans votre saisi !");
+                test=1;
+            }
+            if (tmp.charAt(0) < 'a' || tmp.charAt(0) > 'o' || tmp.length() > 1 || c < 0 || c > 14){
+                System.out.println("Erreur dans votre saisi !");
+                test2=1;
+            }
+            else
+                test2=0;
+        }
+        l = charToInt(tmp.charAt(0));
+        c = (c * 2) + 2;
         ans[0] = l;
         ans[1] = c;
         return  ans;
+    }
+
+    public static void selectionDeplacement(Scanner s, Navire n, Plateau p1){
+        String rep = "";
+        int test=0;
+        int test2=0;
+        int test3=0;
+        int d = 0;
+        
+            if (n.sens == 0){
+                try{
+                    System.out.print("Navire vertical, déplacement souhaité (N/S) : ");
+                    rep = s.next();
+                }catch (InputMismatchException ime) {
+                    System.out.println("Erreur dans votre saisi !");
+                    test=1;
+                }
+                if (!"N".equals(rep) && !"S".equals(rep)){
+                    System.out.println("Erreur dans votre saisi !");
+                    test2=1;
+                }
+                if ((d=n.deplacer(rep.charAt(0), p1.grille, 1)) != 0){
+                    test3=1;
+                }
+                if (d==1)
+                    return ;
+                while (test==1 || test2==1 || test3==1){
+                    try{
+                        System.out.print("Navire vertical, déplacement souhaité (N/S) : ");
+                        rep = s.next();
+                        test=0;
+                    }catch (InputMismatchException ime) {
+                        System.out.println("Erreur dans votre saisi !");
+                        test=1;
+                    }
+                    if (!"N".equals(rep) && !"S".equals(rep)){
+                        System.out.println("Erreur dans votre saisi !");
+                        test2=1;
+                    }
+                    else
+                        test2=0;
+                    if ((d = n.deplacer(rep.charAt(0), p1.grille, 1)) != 0)
+                        test3=1;
+                    else
+                        test3=0;
+                    if (d==1)
+                        return ;
+                }
+            }
+            else{
+                try{
+                    System.out.print("Navire horizontal, déplacement souhaité (W/E) : ");
+                    rep = s.next();
+                }catch (InputMismatchException ime) {
+                    System.out.println("Erreur dans votre saisi !");
+                    test=1;
+                }
+                if (!"W".equals(rep) && !"E".equals(rep)){
+                    System.out.println("Erreur dans votre saisi !");
+                    test2=1;
+                }
+                if ((d=n.deplacer(rep.charAt(0), p1.grille, 1)) != 0)
+                    test3=1;
+                if (d==1)
+                    return ;
+                while (test==1 || test2==1 || test3==1){
+                    try{
+                        System.out.print("Navire horizontal, déplacement souhaité (W/E) : ");
+                        rep = s.next();
+                        test=0;
+                    }catch (InputMismatchException ime) {
+                        System.out.println("Erreur dans votre saisi !");
+                        test=1;
+                    }
+                    if (!"W".equals(rep) && !"E".equals(rep)){
+                        System.out.println("Erreur dans votre saisi !");
+                        test2=1;
+                    }
+                    else
+                        test2=0;
+                    if ((d=n.deplacer(rep.charAt(0), p1.grille, 1)) != 0)
+                        test3=1;
+                    else
+                        test3=0;
+                    if (d==1)
+                        return ;
+                }
+            }
+            System.out.println("");
     }
 
     public static void afficherJeu() {
@@ -175,11 +387,11 @@ public class BatailleNavale {
             System.out.println("");
             p3.afficherPlateau();
             System.out.println("");
-            p3.checkNavireCoule(); 
-            choixN = selectionNavire(s, p1, p2, p3);
+            p1.checkNavireCoule();
+            choixN = selectionNavire(s, p1);
             option = selectionOption(s, choixN, p1);
-            if (option.equals("t")){
-                choixT = selectionTir(s);
+            if (option.equals("t")){ // choix du tir
+                choixT = selectionTire(s);
                 System.out.println("");
                 switch(p1.grille[choixN[0]][choixN[1]]){
                     case "C":
@@ -192,7 +404,7 @@ public class BatailleNavale {
                         break;
                     case "c":
                         for (Navire n : p1.navires){
-                            if(n.nom.charAt(0) == 'c'){
+                            if(n.nom.charAt(0) == 'C' && n.nom.charAt(1) == 'r'){
                                 n.tirer(choixT[0], choixT[1], grilleIA);
                                 break;
                             }
@@ -200,7 +412,7 @@ public class BatailleNavale {
                         break;
                     case "d":
                         for (Navire n : p1.navires){
-                            if(n.nom.charAt(0) == 'd'){
+                            if(n.nom.charAt(0) == 'D'){
                                 n.tirer(choixT[0], choixT[1], grilleIA);
                                 break;
                             }
@@ -208,7 +420,7 @@ public class BatailleNavale {
                         break;
                     case "s":
                         for (Navire n : p1.navires){
-                            if(n.nom.charAt(0) == 's'){
+                            if(n.nom.charAt(0) == 'S'){
                                 n.tirer(choixT[0], choixT[1], grilleIA);
                                 break;
                             }
@@ -216,11 +428,100 @@ public class BatailleNavale {
                         break;
                 }
             }
-            else{
-                //déplacer
+            else{ // choix du déplacemennt
+                switch(p1.grille[choixN[0]][choixN[1]]){
+                    case "C":
+                        for (Navire n : p1.navires){
+                            if(n.nom.charAt(0) == 'C' && n.nom.charAt(1) == 'u'){
+                                selectionDeplacement(s, n, p1);
+                                break;
+                            }
+                        }
+                        break;
+                    case "c":
+                        for (Navire n : p1.navires){
+                            if(n.nom.charAt(0) == 'C' && n.nom.charAt(1) == 'r'){
+                                if (n.sens == 0){
+                                    for (int i = (int)n.coordonnes.getKey(); i > (int)n.coordonnes.getKey()-n.taille; i--){
+                                        if (choixN[0] == i && choixN[1] == (int)n.coordonnes.getValue()){
+                                            selectionDeplacement(s, n, p1);
+                                            break;
+                                        }
+                                    }
+                                }
+                                else{
+                                    for (int j = (int)n.coordonnes.getValue(); j > (int)n.coordonnes.getValue()-(n.taille*2); j-=2){
+                                        if (choixN[1] == j && choixN[0] == (int)n.coordonnes.getKey()){
+                                            selectionDeplacement(s, n, p1);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "d":
+                        for (Navire n : p1.navires){
+                            if(n.nom.charAt(0) == 'D'){
+                                if (n.sens == 0){
+                                    for (int i = (int)n.coordonnes.getKey(); i > (int)n.coordonnes.getKey()-n.taille; i--){
+                                        if (choixN[0] == i && choixN[1] == (int)n.coordonnes.getValue()){
+                                            selectionDeplacement(s, n, p1);
+                                            break;
+                                        }
+                                    }
+                                }
+                                else{
+                                    for (int j = (int)n.coordonnes.getValue(); j > (int)n.coordonnes.getValue()-(n.taille*2); j-=2){
+                                        if (choixN[1] == j && choixN[0] == (int)n.coordonnes.getKey()){
+                                            selectionDeplacement(s, n, p1);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "s":
+                        for (Navire n : p1.navires){
+                            if(n.nom.charAt(0) == 'S'){
+                                if (n.sens == 0){
+                                    for (int i = (int)n.coordonnes.getKey(); i > (int)n.coordonnes.getKey()-n.taille; i--){
+                                        if (choixN[0] == i && choixN[1] == (int)n.coordonnes.getValue()){
+                                            selectionDeplacement(s, n, p1);
+                                            break;
+                                        }
+                                    }
+                                }
+                                else{
+                                    for (int j = (int)n.coordonnes.getValue(); j > (int)n.coordonnes.getValue()-(n.taille*2); j-=2){
+                                        if (choixN[1] == j && choixN[0] == (int)n.coordonnes.getKey()){
+                                            selectionDeplacement(s, n, p1);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                }
             }
+            p2.lien(grilleIA);
+            p1.afficherPlateau();
+            System.out.println("");
+            p2.afficherPlateau();
+            System.out.println("");
+            p3.afficherPlateau();
+            System.out.println("");
+            p3.checkNavireCoule();
+            System.out.println("L'IA est entrain de jouer...");
+            try {
+                Thread.sleep(3000);
+            }  catch (InterruptedException e) {
+                System.out.println(e);
+            }
+            IA(p1, p3);
         }
-        
     }
     
     public static void afficherJeuCharge(Plateau p1, Plateau p3) {
@@ -256,10 +557,10 @@ public class BatailleNavale {
             c = s.next();
             if(c.equals("q")){
                 String nom = "";
-                System.out.println("Entre le nom du fichier de sauvegarde: ");
+                System.out.println("Entre le nom du fichier de sauvergarde: ");
                 nom = s.next();
                 cheminJ1 = Plateau.savePartie(p1, nom);
-                cheminApercu = Plateau.saveApercu(p2, nom+"Apercu");
+                cheminApercu = Plateau.savePartie(p2, nom+"Apercu");
                 cheminIA = Plateau.savePartie(p3, nom+"IA");
                 System.out.println(cheminJ1);
                 return;
