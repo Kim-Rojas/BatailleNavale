@@ -351,6 +351,8 @@ public class BatailleNavale {
                 test3 = 1;
             }
             if (d == 1) {
+                System.out.println("Navire endommagé, déplacemennt impossible !");
+                System.out.println("");
                 return;
             }
             while (test == 1 || test2 == 1 || test3 == 1) {
@@ -374,6 +376,8 @@ public class BatailleNavale {
                     test3 = 0;
                 }
                 if (d == 1) {
+                    System.out.println("Navire endommagé, déplacemennt impossible !");
+                    System.out.println("");
                     return;
                 }
             }
@@ -393,6 +397,8 @@ public class BatailleNavale {
                 test3 = 1;
             }
             if (d == 1) {
+                System.out.println("Navire endommagé, déplacemennt impossible !");
+                System.out.println("");
                 return;
             }
             while (test == 1 || test2 == 1 || test3 == 1) {
@@ -416,6 +422,8 @@ public class BatailleNavale {
                     test3 = 0;
                 }
                 if (d == 1) {
+                    System.out.println("Navire endommagé, déplacemennt impossible !");
+                    System.out.println("");
                     return;
                 }
             }
@@ -451,8 +459,6 @@ public class BatailleNavale {
             p1.afficherPlateau();
             System.out.println("");
             p2.afficherPlateau();
-            System.out.println("");
-            p3.afficherPlateau();
             System.out.println("");
             p1.checkNavireCoule();
             choixN = selectionNavire(s, p1, p2, p3);
@@ -574,8 +580,6 @@ public class BatailleNavale {
             System.out.println("");
             p2.afficherPlateau();
             System.out.println("");
-            p3.afficherPlateau();
-            System.out.println("");
             p3.checkNavireCoule();
             System.out.println("L'IA est entrain de jouer...");
             try {
@@ -585,6 +589,10 @@ public class BatailleNavale {
             }
             IA(p1, p3);
         }
+        if (p1.verifierPartieFinie() == true)
+            System.out.println("VOUS AVEZ GAGNE !");
+        if (p3.verifierPartieFinie() == true)
+            System.out.println("L'IA A GANGE !");
     }
 
     /**
@@ -795,7 +803,7 @@ public class BatailleNavale {
         Scanner choix = new Scanner(System.in);
         Scanner in = new Scanner(System.in);
 
-        String audioFilePath = "C:\\Users\\Admin\\Documents\\Cours\\ECE\\Semestre 1\\JAVA\\Son1.wav";
+        String audioFilePath = "C:\\Users\\Benji\\Desktop\\ECE\\java\\bataillenavale\\Son1.wav";
         Audio player = new Audio();
 
         while (!success) {

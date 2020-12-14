@@ -44,9 +44,6 @@ public abstract class Navire {
         if (this.sens == 0) { // déplacement vertical
             for (int j = tmpx; j > tmpx - this.taille; j--) {
                 if (tab[j][tmpy].equals("X")) {
-                    if (joueur == 1) {
-                        System.out.println("Navire endommagé, déplacemennt impossible !");
-                    }
                     return 1;
                 }
             }
@@ -115,9 +112,6 @@ public abstract class Navire {
         } else { // déplacement horizontal
             for (int j = tmpy; j > tmpy - (this.taille * 2); j -= 2) {
                 if (tab[tmpx][j].equals("X")) {
-                    if (joueur == 1) {
-                        System.out.println("Navire endommagé, déplacement impossible !");
-                    }
                     return 1;
                 }
             }
